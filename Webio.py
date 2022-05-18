@@ -39,8 +39,8 @@ all_functions = ['Create Cluster', 'Create Vol.', 'Create Init.', 'Create Vol. A
 while button_value:
 
     info = input_group("Operation Info", [
-        input('Machine URL', name='url', placeholder='192.168.1.1', type=URL),
-        input('Port', name='port', placeholder='8080'),
+        input('Machine URL', name='url', placeholder='172.16.4.241', type=URL),
+        input('Port', name='port', placeholder='8443'),
         input('Password', name='pwd', type=PASSWORD),
         checkbox('Operation Type', name='type', options=all_functions, value=[i for i in range(len(all_functions))]),
         input('Create Cluster Name', name='0'),
@@ -57,10 +57,10 @@ while button_value:
 
     put_code('Target Cluster:'+str(url))
 
-    if all_functions[1] in type:
+    if all_functions[0] in type:
         params = []     # Request parameters
         try:    # Add loop to continuous get data
-            r = req.get(url=url, data=params)
+            r = req.get(url=url+':'+port, data=params)
             value = 0.85                # Use parsed return: value = r.text
             static_bar('upload', value)     # Create static bar of given value
             out(type, url)              # Print Operation
@@ -69,21 +69,35 @@ while button_value:
             invalid_url()               # Print Error Message
             button_value = looper()     # End Here
 
-    elif all_functions[2] in type:
+    elif all_functions[1] in type:
         params=[]
         try:
             r = req.delete(url=url, data=params)
         except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
             invalid_url()  # Print Error Message
             button_value = looper()  # End Here
-    elif all_functions[3] in type:
+    elif all_functions[2] in type:
         params=[]
         try:
             r = req.post(url=url, data=params)
         except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
             invalid_url()  # Print Error Message
             button_value = looper()  # End Here
+    elif all_functions[3] in type:
+        params=[]
+        try:
+            r = req.put(url=url, data=params)
+        except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
+            invalid_url()  # Print Error Message
+            button_value = looper()  # End Here
     elif all_functions[4] in type:
+        params=[]
+        try:
+            r = req.put(url=url, data=params)
+        except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
+            invalid_url()  # Print Error Message
+            button_value = looper()  # End Here
+    elif all_functions[5] in type:
         params=[]
         try:
             r = req.put(url=url, data=params)
