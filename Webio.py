@@ -4,6 +4,26 @@ from pywebio.output import *
 import requests as req
 
 
+class Cluster:
+    def __init__(self, id):
+        self.id = id
+        self.hosts = []
+        self.attributes = {}
+
+
+class Host:
+    def __init__(self, id):
+        self.id = id
+        self.disks = []
+        self.attributes = {}
+
+
+class Disk:
+    def __init__(self, id):
+        self.id = id
+        self.attributes = {}
+
+
 def out(operation, reply):      # Shows and logs the operation done
     log = {
         'operation_msg': 'Defined Operation: ' + str(operation),
@@ -63,27 +83,6 @@ def get_all_cluster_id_from_response(res: req.Response):
     return ans
 
 
-def get_all_host_id_from_response(res: req.Response):
-    ans = []
-    for label, content in res.json().items():
-        if label == 'data':
-            for host_info in content:
-                for a, b in host_info.items():
-                    if a == 'hostId':
-                        ans.append(str(b))
-    return ans
-
-
-def get_all_disk_id_from_response(res: req.Response):
-    ans = []
-    for label, content in res.json().items():
-        if label == 'data':
-            for disk_info in content:
-                for a, b in disk_info.items():
-                    if a == 'diskId':
-                        ans.append(str(b))
-    return ans
-
 def get_cluster_by_id(link, portal, key, id: str):
     tmp = req.get(url=link+':'+portal+'/v1/clusters'+'/'+id,
                   headers={'Authorization': 'bearer' + str(key)}, verify=False)
@@ -116,6 +115,61 @@ def get_disks_by_host_id(link, portal, key, id: str):
                   headers={'Authorization': 'bearer' + str(key)}, verify=False)
     return tmp
 
+
+def get_all_host_id_from_response(res: req.Response):
+    ans = []
+    for label, content in res.json().items():
+        if label == 'data':
+            for host_info in content:
+                for a, b in host_info.items():
+                    if a == 'hostId':
+                        ans.append(str(b))
+    return ans
+
+
+def get_all_disk_id_from_response(res: req.Response):
+    ans = []
+    for label, content in res.json().items():
+        if label == 'data':
+            for disk_info in content:
+                for a, b in disk_info.items():
+                    if a == 'diskId':
+                        ans.append(str(b))
+    return ans
+
+
+def get_all_attributes_from_response(res: req.Response):
+    attr = {}
+    for label, content in res.json().items():
+        if label == 'data':
+            for any_info in content:
+                for a, b in any_info.items():
+                    attr[a] = b
+    return attr
+
+def get_everything_as_tree(link, portal, key):
+    clusterlist = []
+    res1 = get_all_clusters(link, portal, key)
+    all_clusterid = get_all_cluster_id_from_response(res1)
+    cluster_count = 0
+    for clusterid in all_clusterid:
+        clusterlist.append(Cluster(clusterid))
+        res2 = get_hosts_by_cluster_id(link, portal, key, clusterid)
+        all_hostid = get_all_host_id_from_response(res2)
+        host_count = 0
+        for hostid in all_hostid:
+            clusterlist[cluster_count].hosts.append(Host(hostid))
+            res3 = get_disks_by_host_id(link, portal, key, hostid)
+            all_diskid = get_all_disk_id_from_response(res3)
+            for diskid in all_diskid:
+                clusterlist[cluster_count].hosts[host_count].append(
+                    Disk(diskid))
+            host_count += 1
+        cluster_count += 1
+    return clusterlist
+
+def assign_all_tags_for_host(link, portal, key, id: str):
+    pass
 
 # Default value of button value, 1 is new instance and 0 is exit
 button_value = 1
@@ -150,16 +204,10 @@ while button_value:
         params = []                     # Request parameters
         try:                            # Add loop to continuous get data
             key = get_token(url, port)
-            # r = get_all_host(url, port, key)
-            # r = get_all_free_hosts(url, port, key)
-            r = get_all_clusters(url, port, key)
-            clusterid = get_all_cluster_id_from_response(r)[0]
-            r = get_hosts_by_cluster_id(url, port, key, clusterid)
-            hostid = get_all_host_id_from_response(r)[0]
-            r = get_disks_by_host_id(url, port, key, hostid)
-            diskid = get_all_disk_id_from_response(r)
+            r = get_all_host(url, port, key)
+            test_msg = get_all_host_id_from_response(r)
             out(type, r)              # Print Operation
-            print(diskid)
+            print(test_msg)
             button_value = looper()     # End Here
         except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
             invalid_url()               # Print Error Message
