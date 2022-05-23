@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Home
+{% endblock %}
+
+{% block content %}
+<h1> This is the home page </h1>
+{% if bool1 == False%}
+Yes, bool1 is false.
+{% elif bool2%}
+Yes, bool2 is true.
+{% else %}
+This is an else.
+{% endif %}
+{% endblock %}
