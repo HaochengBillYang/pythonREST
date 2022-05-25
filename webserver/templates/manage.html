@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Home
+{% endblock %}
+
+{% block content %}
+<h1> HCD Disk Management System v1.0</h1>
+
+<form method="POST">
+        <script language="JavaScript">
+        function toggle(source) {
+                checkboxes = document.getElementsByTagName('input');
+                for(var i=0, n=checkboxes.length;i<n;i++) {
+                  checkboxes[i].checked = source.checked;
+            }
+        }
+        </script>
+        <input type="checkbox" onClick="toggle(this)" /> Select/Deselect All<br/>
+        {%for host in hosts[1]%}
+        Host {{host}}
+        <br/>
+        {%for disk in disks[2]%}
+        {% autoescape false %}
+        <input type="checkbox" name="{{element}}" value="1"> disk {{disk}}<br/>
+        {% endautoescape%}
+        {%endfor%}      
+        {%endfor%}
+        <br />
+        <p>
+        <button type="submit" value="1" class="btn btn-primary">Give Tags</button>
+        <button type="submit" value="2" class="btn btn-primary">Do Something</button>
+        </p>
+        <p>
+        <button type="submit" value="3" class="btn btn-primary">Use Somethiing</button>
+        <button type="submit" value="4" class="btn btn-primary">Write Something</button>   
+        </p>
+</form>
+
+{% endblock %}
