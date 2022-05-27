@@ -16,24 +16,29 @@ Home
             }
         }
         </script>
+        <div class="form-group">
         <input type="checkbox" onClick="toggle(this)" /> Select/Deselect All<br/>
-        {%for host in hosts[1]%}
-        Host {{host}}
-        <br/>
-        {%for disk in disks[2]%}
+        </div>
+        {%for host in hosts[0][1]%}  <!-- for 1 cluster only -->
+        Host {{host}} <br/>
+        {%for disk in disks%}
+        {%if disk[1] == host %}
+        {%for onedisk in disk[2]%}
         {% autoescape false %}
-        <input type="checkbox" name="{{element}}" value="1"> disk {{disk}}<br/>
+        <input type="checkbox" id = "{{onedisk}}" name="{{onedisk}}" value="1"> disk {{onedisk}}<br/>
         {% endautoescape%}
+        {%endfor%}
+        {%endif%}
         {%endfor%}      
         {%endfor%}
         <br />
         <p>
-        <button type="submit" value="1" class="btn btn-primary">Give Tags</button>
-        <button type="submit" value="2" class="btn btn-primary">Do Something</button>
+        <button type="submit" name = "submit_button" value="1" class="btn btn-primary">Give Tags</button>
+        <button type="submit" name = "submit_button" value="2" class="btn btn-primary">Do Something</button>
         </p>
         <p>
-        <button type="submit" value="3" class="btn btn-primary">Use Somethiing</button>
-        <button type="submit" value="4" class="btn btn-primary">Write Something</button>   
+        <button type="submit" name = "submit_button" value="3" class="btn btn-primary">Use Something</button>
+        <button type="submit" name = "submit_button" value="4" class="btn btn-primary">Write Something</button>   
         </p>
 </form>
 
