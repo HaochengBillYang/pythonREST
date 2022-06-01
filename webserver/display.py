@@ -28,32 +28,8 @@ def manage():
     url = session['url']
     try:
         key = op.get_token(url, port)
-        session['all_disks'] = []
-        session['clusters'] = []
-        session['disks'] = []
-        session['hosts'] = []
-        res1 = op.get_all_clusters(url, port, key)
-        session['clusters'] = op.get_all_cluster_id_from_response(res1)
-        for i in range(len(session['clusters'])):
-            res2 = op.get_hosts_by_cluster_id(
-                url, port, key, session['clusters'][i])
-            host_temp = op.get_all_host_id_from_response(res2)
-            session['hosts'].append([session['clusters'][i], host_temp])
-            for j in range(len(session['hosts'][i][1])):
-                res3 = op.get_disks_by_host_id(
-                    url, port, key, session['hosts'][i][1][j])
-                disk_temp = op.get_all_disk_id_from_response(res3)
-                all_info = res3.json()
-                session['disks'].append(
-                    [session['clusters'][i], session['hosts'][i][1][j], disk_temp, all_info])
-                for disk in disk_temp:
-                    session['all_disks'].append(disk)
-                    tmp = []
-                    [tmp.append(x)
-                     for x in session['all_disks'] if x not in tmp]
-                    session['all_disks'] = tmp
-                    # Data structure is very bad. Need rewrite. 
-                    # Best: {'#clusterid': {'#hostid': ['#diskid','#diskid']}}
+        session["disk_list"] = op.generate_list(url, port, key)
+        # Data structure is [disk, host, cluster], [disk, host, cluster]
 
     except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
         flash("invalid url", type="error")               # Print Error Message
@@ -61,28 +37,27 @@ def manage():
     if request.method == 'POST':
         operation = request.form.get("submit_button")
         machines = []
-        disk_list = []
-        for disks in session["disks"]:
-            for element in disks[2]:
-                machines.append(request.form.get(element))
-        # flash(session['all_disks'])
+        targets = []
+        for disk in session["disk_list"]:
+            machines.append(request.form.get(disk[0]))
         n = 0
         for machine in machines:
-
             if machine is not None:
-                disk_list.append(session['all_disks'][n])
+                targets.append(session['all_disks'][n])
             n += 1
 
-        for item in disk_list:
+        for item in targets:
             if operation == '1': # Give and Enable Tags
+                print(item)
                 flash('Tags DATADISK, METADATADISK given to disk: ' + str(item))
                 # Change as you like, tags are auto enabled so be careful, usually first two.
-                op.give_disk_tag_by_id(url, port, key, item, tag="DATA_DISK")
+                log = op.give_disk_tag_by_id(url, port, key, str(item), tag="DATA_DISK")
                 op.give_disk_tag_by_id(url, port, key, item, tag="METADATA_DISK")
+                flash(log.json())
                 # op.give_disk_tag_by_id(url, port, key, item, tag="READ_CACHE")
                 # op.give_disk_tag_by_id(url, port, key, item, tag="WRITE_CACHE")
             elif operation == '2': # Disable Tags
-                flash(res3.json())
+                pass
             elif operation == 3: # 
                 pass
             elif operation == 4:

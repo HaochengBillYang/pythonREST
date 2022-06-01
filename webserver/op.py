@@ -1,3 +1,4 @@
+from pip import main
 import requests.exceptions
 import requests as req
 
@@ -116,11 +117,26 @@ def get_all_attributes_from_response(res: req.Response):
 def give_disk_tag_by_id(link, portal, key, id, tag):
     id_param = {"diskIds": id, "diskTag": tag}
     tmp = req.post(url=link+':'+portal+'/v1/disks/tag/auto-enable',
-                   headers={'Authorization': 'bearer' + str(key)}, data=id_param, verify=False)
+                   headers={'Authorization': 'bearer' + str(key), 'Content-Type': 'application/json; charset=utf8'}, data=id_param, verify=False)
     return tmp
     
 def delete_disk_tag_by_id(link, portal, key, id, tag):
     id_param = {"diskIds": id, "diskTag": tag}
     tmp = req.post(url=link+':'+portal+'/v1/disks/tag/disable',
-                   headers={'Authorization': 'bearer' + str(key)}, data=id_param, verify=False)
+                   headers={'Authorization': 'bearer' + str(key), 'Content-Type': ''}, data=id_param, verify=False)
     return tmp
+
+def generate_list(link, portal, key):
+    main_list = []
+    ask1 = get_all_clusters(link, portal, key)
+    clusters = get_all_cluster_id_from_response(ask1)
+    for cluster in clusters:
+        ask2 = get_hosts_by_cluster_id(link, portal, key, cluster)
+        hosts = get_all_host_id_from_response(ask2)
+        for host in hosts:
+            ask3 = get_disks_by_host_id(link, portal, key, host)
+            disks = get_all_disk_id_from_response(ask3)
+            for disk in disks:
+                main_list.append([disk, host, cluster])
+    return main_list
+
