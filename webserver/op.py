@@ -112,3 +112,15 @@ def get_all_attributes_from_response(res: req.Response):
                     attr[a] = b
     return attr
 
+
+def give_disk_tag_by_id(link, portal, key, id, tag):
+    id_param = {"diskIds": id, "diskTag": tag}
+    tmp = req.post(url=link+':'+portal+'/v1/disks/tag/auto-enable',
+                   headers={'Authorization': 'bearer' + str(key)}, data=id_param, verify=False)
+    return tmp
+    
+def delete_disk_tag_by_id(link, portal, key, id, tag):
+    id_param = {"diskIds": id, "diskTag": tag}
+    tmp = req.post(url=link+':'+portal+'/v1/disks/tag/disable',
+                   headers={'Authorization': 'bearer' + str(key)}, data=id_param, verify=False)
+    return tmp
