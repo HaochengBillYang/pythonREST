@@ -1,6 +1,4 @@
-from sre_constants import SUCCESS
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session
-import flask
 import requests
 from flask_login import login_required, current_user
 from . import op
