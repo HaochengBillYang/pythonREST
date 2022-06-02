@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title%}
 Home
@@ -10,7 +10,7 @@ Home
 <form method="POST">
         <script language="JavaScript">
                 function toggle(source) {
-                        checkboxes = document.getElementsByTagName('input');
+                        checkboxes = document.getElementsByTagName("input");
                         for (var i = 0, n = checkboxes.length; i < n; i++) {
                                 checkboxes[i].checked = source.checked;
                         }
@@ -19,27 +19,25 @@ Home
         <div class="form-group">
                 <input type="checkbox" onClick="toggle(this)" /> Select/Deselect All<br />
         </div>
-        {%for host in hosts[0][1]%}
-        <!-- for 1 cluster only -->
-        Host {{host}} <br />
-        {%for disk in disks%}
-        {%if disk[1] == host %}
-        {%for onedisk in disk[2]%}
-        {% autoescape false %}
-        <input type="checkbox" id="{{onedisk}}" name="{{onedisk}}" value="1"> disk {{onedisk}}<br />
-        {% endautoescape%}
-        {%endfor%}
+        {%for i in range(disks|length)%}
+        {%if i != 0%}
+        {%if disks[i][1] != disks[i-1][1]%}
+        Host {{disks[i][1]}} <br/>
         {%endif%}
-        {%endfor%}
+        {%elif i==0%}
+        Host {{disks[0][1]}} <br/>
+        {%endif%}
+        {% autoescape false %}
+        <input type="checkbox" id="{{disks[i][0]}}" name="{{disks[i][0]}}" value="1"> disk {{disks[i][0]}}<br />
+        {% endautoescape%}
+        
         {%endfor%}
         <br />
         <p>
-                <button type="submit" name="submit_button" value="1" class="btn btn-primary">Give&Enable Tags</button>
-                <button type="submit" name="submit_button" value="2" class="btn btn-primary">Disable&Remove Tags</button>
-        </p>
-        <p>
-                <button type="submit" name="submit_button" value="3" class="btn btn-primary">3</button>
-                <button type="submit" name="submit_button" value="4" class="btn btn-primary">4</button>
+                <button type="submit" name="submit_button" value="1" class="btn btn-primary btn-block">Give&Enable Tags</button>
+                <button type="submit" name="submit_button" value="2" class="btn btn-warning btn-block">Disable&Remove Tags</button>
+                <button type="submit" name="submit_button" value="3" class="btn btn-primary btn-block">3</button>
+                <button type="submit" name="submit_button" value="4" class="btn btn-primary btn-block">4</button>
         </p>
 </form>
 

@@ -1,24 +1,25 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title%}
 Home
 {% endblock %}
 
 {% block content %}
-<h1> HCD Disk Management System v1.0</h1>
+<br/>
+<h1> HCD Disk Management System beta</h1>
+<br/>
 
 <form method="POST">
-    <h3 align="center">Provide Info</h3>
     <div class="form-group">
-        <label for="url">url</label>
+        <label for="url">URL</label>
         <input type="url" class="form-control" id="url" name="url" placeholder="https://172.16.4.241" />
     </div>
     <div class="form-group">
-        <label for="port">port</label>
+        <label for="port">PORT</label>
         <input type="port" class="form-control" id="port" name="port" placeholder="8443" />
     </div>
     <br />
-    <button type="submit" class="btn btn-primary">Manage Cluster</button>
+    <button type="submit" class="btn btn-primary btn-block">Manage Cluster</button>
 
 </form>
 
