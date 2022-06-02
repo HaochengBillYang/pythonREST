@@ -11,5 +11,12 @@ op = GetAllHostOperation(
     onlyFreeHost=True
 ))
 
-print(len(op.data))
+print(op.data)
+
+op = GetDisksByHostIdOperation(
+    host="https://172.16.4.248:8443"
+).invoke(GetDisksByHostIdRequest(
+    hostId=op.data[0].hostId
+))
+
 print(op.data)

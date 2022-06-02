@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from operation.AccessKeyManager import AccessKeyManager
 from request.Request import FormRequest, Request, Pipeline, RestRequest, Method
 from request.pipelines.SimpleLogger import SimpleLogger
-from utils.Singleton import SingletonObject
+from utils.Utils import SingletonObject, CustomBase
 
 
 class Operation:
@@ -134,4 +134,35 @@ class GetAllHostOperation(Operation):
     def invoke(self, request: GetAllHostRequest) -> GetAllHostResponse:
         return super().invoke(request)
 
-#
+
+# get_disks_by_host_id
+class GetDisksByHostIdRequest(CustomBase):
+    hostId: str
+
+    class Config:
+        exclude = {"hostId"}
+
+
+class DiskInfo(BaseModel):
+    diskId: str
+    mountPoint: str
+    hostId: str
+    state: str
+    diskTagList: list[str]
+
+
+class GetDisksByHostIdResponse(BaseModel):
+    data: list[DiskInfo]
+
+
+class GetDisksByHostIdOperation(Operation):
+    def __init__(self, host: str):
+        super().__init__(
+            host=host,
+            path="/v1/disks/by-host/",
+            requester=RestRequest(method=Method.GET).add_pipeline(KeyExchangePipeline())
+        )
+
+    def invoke(self, request: GetDisksByHostIdRequest) -> GetDisksByHostIdResponse:
+        self.path += request.hostId
+        return super().invoke(request)
