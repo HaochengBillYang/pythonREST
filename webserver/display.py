@@ -69,10 +69,6 @@ def manage():
                     success = 0
                     flash(log1.json(), category="error")
                     flash(log2.json(), category="error")
-            elif operation == "3": # 
-                op.remove_metadisk_tag_by_id
-            elif operation == "4":
-                pass
         if success:
             flash("OK")
 
