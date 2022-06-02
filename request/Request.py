@@ -1,3 +1,5 @@
+from enum import Enum
+
 import requests as req
 
 
@@ -34,7 +36,7 @@ class Request(object):
         self.data[key] = value
         return self
 
-    def add_pipeline(self, pipeline:Pipeline) -> "Request":
+    def add_pipeline(self, pipeline: Pipeline) -> "Request":
         self.pipelines.append(pipeline)
         return self
 
@@ -66,15 +68,35 @@ class FormRequest(Request):
         return response
 
 
+class Method(Enum):
+    GET = 0
+    POST = 1
+    PUT = 2
+    DELETE = 3
+    PATCH = 4
+
+
 class RestRequest(Request):
-    def __init__(self, url: str):
+    def __init__(self, url: str, method: Method):
         super().__init__(url)
+        self.method = method
         self.add_header("Content-Type", "application/json; charset=utf8")
 
     def _actual_send(self) -> Response:
         self._before_request()
-        resp = req.post(url=self.url, json=self.data, headers=self.headers, verify=False)
+        resp = None
+        if self.method == Method.GET:
+            resp = req.get(url=self.url, data=self.data, headers=self.headers, verify=False)
+        elif self.method == Method.POST:
+            resp = req.post(url=self.url, json=self.data, headers=self.headers, verify=False)
+        elif self.method == Method.PUT:
+            resp = req.put(url=self.url, json=self.data, headers=self.headers, verify=False)
+        elif self.method == Method.DELETE:
+            # If a DELETE request includes an entity body, the body is ignored
+            resp = req.delete(url=self.url, data=self.data, headers=self.headers, verify=False)
+        elif self.method == Method.PATCH:
+            resp = req.patch(url=self.url, json=self.data, headers=self.headers, verify=False)
+
         response = Response(resp.status_code, resp.text)
         self._after_request(response)
         return response
-
