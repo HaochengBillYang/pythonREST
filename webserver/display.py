@@ -47,9 +47,11 @@ def manage():
 
         success = 1
         for item in targets:
-            if operation == "1": # Give and Enable Tags
-                log1 = op.give_disk_tag_by_id(url, port, key, item, tag="DATA_DISK")
-                log2 = op.give_disk_tag_by_id(url, port, key, item, tag="METADATA_DISK")
+            if operation == "1":  # Give and Enable Tags
+                log1 = op.give_disk_tag_by_id(
+                    url, port, key, item, tag="DATA_DISK")
+                log2 = op.give_disk_tag_by_id(
+                    url, port, key, item, tag="METADATA_DISK")
                 # op.give_disk_tag_by_id(url, port, key, item, tag="READ_CACHE")
                 # op.give_disk_tag_by_id(url, port, key, item, tag="WRITE_CACHE")
                 if log1.ok and log2.ok:
@@ -58,9 +60,11 @@ def manage():
                     success = 0
                     flash(log1.json(), category="error")
                     flash(log2.json(), category="error")
-            elif operation == "2": # Delete and Disable Tags
-                log1 = op.remove_datadisk_tag_by_id(url, port, key, item, tag="DATA_DISK")
-                log2 = op.remove_metadisk_tag_by_id(url, port, key, item, tag="METADATA_DISK")
+            elif operation == "2":  # Delete and Disable Tags
+                log1 = op.remove_datadisk_tag_by_id(
+                    url, port, key, item, tag="DATA_DISK")
+                log2 = op.remove_metadisk_tag_by_id(
+                    url, port, key, item, tag="METADATA_DISK")
                 if log1.ok and log2.ok:
                     pass
                 else:

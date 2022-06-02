@@ -115,21 +115,25 @@ def get_all_attributes_from_response(res: req.Response):
 
 
 def give_disk_tag_by_id(link, portal, key, disk: list, tag):
-    id_param = {"hostId": disk[1],"diskIds": [disk[0]], "diskTag": tag}
+    id_param = {"hostId": disk[1], "diskIds": [disk[0]], "diskTag": tag}
     tmp = req.post(url=link+":"+portal+"/v1/disks/tag/auto-enable",
                    headers={"Authorization": "bearer" + str(key), "Content-Type": "application/json; charset=utf8"}, json=id_param, verify=False)
     return tmp
 
+
 def remove_datadisk_tag_by_id(link, portal, key, disk, tag):
     tmp = req.delete(url=link+":"+portal+"/v1/disks/tag/auto-disable/"+disk[1]+"/"+disk[0]+"/"+tag,
-                   headers={"Authorization": "bearer" + str(key), "Content-Type": "application/json; charset=utf8"}, 
-                   verify=False)
+                     headers={"Authorization": "bearer" +
+                              str(key), "Content-Type": "application/json; charset=utf8"},
+                     verify=False)
     return tmp
+
 
 def remove_metadisk_tag_by_id(link, portal, key, disk, tag):
     tmp = req.delete(url=link+":"+portal+"/v1/disks/tag/auto-disable/"+disk[1]+"/"+disk[0]+"/"+tag,
-                   headers={"Authorization": "bearer" + str(key), "Content-Type": "application/json; charset=utf8"}, 
-                   verify=False)
+                     headers={"Authorization": "bearer" +
+                              str(key), "Content-Type": "application/json; charset=utf8"},
+                     verify=False)
     return tmp
 
 
@@ -146,4 +150,3 @@ def generate_list(link, portal, key):
             for disk in disks:
                 main_list.append([disk, host, cluster])
     return main_list
-
