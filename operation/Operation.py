@@ -73,7 +73,15 @@ class GetAllClustersRequest(BaseModel):
     pass
 
 
+class ClusterInfo(BaseModel):
+    clusterId: str
+    clusterName: str
+    state: str
+    type: str
+
+
 class GetAllClustersResponse(BaseModel):
+    data: list[ClusterInfo]
     pass
 
 
