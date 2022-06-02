@@ -28,8 +28,8 @@ class SimpleLogger(Pipeline):
 
     def logger(self, color: ColorCode, message: str) -> None:
         now = datetime.now()
-        date_time = now.strftime("[%m/%d-%H:%M:%S]: ")
-        print(color.to_code(), date_time, message)
+        date_time = now.strftime("%m/%d-%H:%M:%S]: ")
+        print(color.to_code() + "[" + self.logger_name, date_time, message)
 
     def invoke_before_request(self, request: Request):
         self.logger(ColorCode.BLUE, "Requesting " + request.url + " ;data = " + str(request.data))

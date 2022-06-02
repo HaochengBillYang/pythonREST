@@ -18,8 +18,10 @@ class Response(object):
 
 
 class Request(object):
-    def __init__(self, url: str):
-        self.url: str = url
+    def __init__(self):
+        self.url: str = ""
+        self.path: str = ""
+        self.host: str = ""
         self.headers: dict = {}
         self.data: dict = {}
         self.pipelines: list[Pipeline] = []
@@ -40,7 +42,17 @@ class Request(object):
         self.pipelines.append(pipeline)
         return self
 
-    def send(self) -> Response:
+    def send(self, host: str, path: str) -> Response:
+
+        if host.endswith("/"):
+            host = host.removesuffix("/")
+
+        if path.startswith("/"):
+            path = path.removeprefix("/")
+
+        self.host = host
+        self.path = path
+        self.url = host + "/" + path
         return self._actual_send()
 
     def _actual_send(self) -> Response:
@@ -56,8 +68,8 @@ class Request(object):
 
 
 class FormRequest(Request):
-    def __init__(self, url: str):
-        super().__init__(url)
+    def __init__(self):
+        super().__init__()
         self.add_header("Content-Type", "application/x-www-form-urlencoded")
 
     def _actual_send(self) -> Response:
@@ -77,8 +89,8 @@ class Method(Enum):
 
 
 class RestRequest(Request):
-    def __init__(self, url: str, method: Method):
-        super().__init__(url)
+    def __init__(self, method: Method):
+        super().__init__()
         self.method = method
         self.add_header("Content-Type", "application/json; charset=utf8")
 
