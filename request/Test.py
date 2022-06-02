@@ -13,10 +13,31 @@ op = GetAllHostOperation(
 
 print(op.data)
 
-op = GetDisksByHostIdOperation(
+op2 = GetDisksByHostIdOperation(
     host="https://172.16.4.248:8443"
 ).invoke(GetDisksByHostIdRequest(
     hostId=op.data[0].hostId
 ))
 
-print(op.data)
+print(op2.data)
+
+
+op3 = GiveDiskTagByIdOperation(
+    host="https://172.16.4.248:8443"
+).invoke(GiveDiskTagByIdRequest(
+    hostId=op.data[0].hostId,
+    diskIds=[op2.data[0].diskId],
+    diskTag='DATA_DISK'
+))
+
+
+op4 = RemoveDiskTagByIdOperation(
+    host="https://172.16.4.248:8443"
+).invoke(RemoveDiskTagByIdRequest(
+    hostId=op.data[0].hostId,
+    diskIds=[op2.data[0].diskId],
+    diskTag='DATA_DISK'
+))
+
+
+print(op4)

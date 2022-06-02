@@ -28,7 +28,12 @@ class Operation:
 
         if response.return_code < 400:
             kclass = globals()[self.__class__.__name__.removesuffix("Operation") + "Response"]
-            return kclass(**(json.loads(response.return_data)))
+            results = response.return_data
+            if results == "":
+                results = {}
+            else:
+                results = json.loads(results)
+            return kclass(**results)
         else:
             raise Exception("Status Error")
 
@@ -165,4 +170,62 @@ class GetDisksByHostIdOperation(Operation):
 
     def invoke(self, request: GetDisksByHostIdRequest) -> GetDisksByHostIdResponse:
         self.path += request.hostId
+        return super().invoke(request)
+
+
+# give_disk_tag_by_id
+class GiveDiskTagByIdRequest(BaseModel):
+    hostId: str
+    diskIds: list[str]
+    diskTag: str
+
+
+class GiveDiskTagByIdResponse(BaseModel):
+    pass
+
+
+class GiveDiskTagByIdOperation(Operation):
+    def __init__(self, host: str):
+        super().__init__(
+            host=host,
+            path="/v1/disks/tag/auto-enable",
+            requester=RestRequest(method=Method.POST).add_pipeline(KeyExchangePipeline())
+        )
+
+    def invoke(self, request: GiveDiskTagByIdRequest) -> GiveDiskTagByIdResponse:
+        return super().invoke(request)
+
+
+# remove_disk_tag_by_id
+class RemoveDiskTagByIdRequest(CustomBase):
+    hostId: str
+    diskIds: list[str]
+    diskTag: str
+
+    class Config:
+        exclude = {"hostId", "diskIds"}
+
+
+class RemoveDiskTagByIdResponse(BaseModel):
+    taskId: str
+    pass
+
+
+class RemoveDiskTagByIdOperation(Operation):
+    def __init__(self, host: str):
+        super().__init__(
+            host=host,
+            path="/v1/disks/tag/auto-disable/",
+            requester=RestRequest(method=Method.DELETE).add_pipeline(KeyExchangePipeline())
+        )
+
+    def invoke(self, request: RemoveDiskTagByIdRequest) -> RemoveDiskTagByIdResponse:
+        if len(request.diskIds) == 0:
+            raise Exception("Can not have zero length diskIds")
+
+        self.path += request.hostId
+        self.path += "/"
+        self.path += ",".join(request.diskIds)
+        self.path += "/"
+        self.path += request.diskTag
         return super().invoke(request)
