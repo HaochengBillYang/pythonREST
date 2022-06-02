@@ -120,6 +120,18 @@ def give_disk_tag_by_id(link, portal, key, disk: list, tag):
                    headers={"Authorization": "bearer" + str(key), "Content-Type": "application/json; charset=utf8"}, json=id_param, verify=False)
     return tmp
 
+def remove_datadisk_tag_by_id(link, portal, key, disk, tag):
+    tmp = req.delete(url=link+":"+portal+"/v1/disks/tag/auto-disable/"+disk[1]+"/"+disk[0]+"/"+tag,
+                   headers={"Authorization": "bearer" + str(key), "Content-Type": "application/json; charset=utf8"}, 
+                   verify=False)
+    return tmp
+
+def remove_metadisk_tag_by_id(link, portal, key, disk, tag):
+    tmp = req.delete(url=link+":"+portal+"/v1/disks/tag/auto-disable/"+disk[1]+"/"+disk[0]+"/"+tag,
+                   headers={"Authorization": "bearer" + str(key), "Content-Type": "application/json; charset=utf8"}, 
+                   verify=False)
+    return tmp
+
 
 def generate_list(link, portal, key):
     main_list = []

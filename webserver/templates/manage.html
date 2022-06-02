@@ -5,8 +5,9 @@ Home
 {% endblock %}
 
 {% block content %}
-<h1> HCD Disk Management System beta</h1>
-
+<br/>
+<h1> Manage Disks</h1>
+<br/>
 <form method="POST">
         <script language="JavaScript">
                 function toggle(source) {
@@ -17,27 +18,41 @@ Home
                 }
         </script>
         <div class="form-group">
-                <input type="checkbox" onClick="toggle(this)" /> Select/Deselect All<br />
+                <h5>
+                <input type="checkbox" class="largerCheckbox" onClick="toggle(this)" /> 
+                SEL/DESEL ALL</h5>
         </div>
         {%for i in range(disks|length)%}
         {%if i != 0%}
         {%if disks[i][1] != disks[i-1][1]%}
-        Host {{disks[i][1]}} <br/>
+        <h5>
+        <img src="{{url_for('static', filename='nas-drives.png')}}" 
+        width = "20" height="20" style="position:relative; top: -3px"> 
+        HOST {{disks[i][1]}} 
+        </h5>
         {%endif%}
         {%elif i==0%}
-        Host {{disks[0][1]}} <br/>
+        <h5>
+        <img src="{{url_for('static', filename='nas-drives.png')}}" 
+        width = "20" height="20" style="position:relative; top: -3px"> 
+        HOST {{disks[0][1]}}
+        </h5>
         {%endif%}
         {% autoescape false %}
-        <input type="checkbox" id="{{disks[i][0]}}" name="{{disks[i][0]}}" value="1"> disk {{disks[i][0]}}<br />
+        <h5>
+        <img src="{{url_for('static', filename='nvme-ssd.png')}}"
+        width = "20" height="20" style="position:relative; top: -3px">
+        <input type="checkbox" class= "largerCheckbox" id="{{disks[i][0]}}" name="{{disks[i][0]}}" value="1"> DISK {{disks[i][0]}}<br />
+        </h5>
         {% endautoescape%}
         
         {%endfor%}
         <br />
         <p>
-                <button type="submit" name="submit_button" value="1" class="btn btn-primary btn-block">Give&Enable Tags</button>
-                <button type="submit" name="submit_button" value="2" class="btn btn-warning btn-block">Disable&Remove Tags</button>
-                <button type="submit" name="submit_button" value="3" class="btn btn-primary btn-block">3</button>
-                <button type="submit" name="submit_button" value="4" class="btn btn-primary btn-block">4</button>
+                <button type="submit" name="submit_button" value="1" class="btn btn-primary btn-block">
+                        Give&Enable Tags</button>
+                <button type="submit" name="submit_button" value="2" class="btn btn-warning btn-block">
+                        Disable&Remove Tags</button>
         </p>
 </form>
 

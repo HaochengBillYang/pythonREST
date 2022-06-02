@@ -8,14 +8,22 @@
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
     crossorigin="anonymous" />
-
+  <style>
+  input.largerCheckbox {
+      position: relative;
+      top: 3px;
+      width: 20px;
+      height: 20px;
+  }
+  </style>
   <title>{% block title %}Home{% endblock %}</title>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <span class="navbar-brand mb-0 h1">
-      <img src="{{url_for('static',filename='logo.svg')}}" align = middle width="30" height="30" alt="">
+      <img src="{{url_for('static',filename='logo.svg')}}"
+      width="30" height="30" style="position:relative; top: -3px">
       DMS Beta
     </span>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">

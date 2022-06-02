@@ -1,3 +1,4 @@
+from sre_constants import SUCCESS
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session
 import flask
 import requests
@@ -46,25 +47,33 @@ def manage():
                 targets.append(session["disk_list"][n])
             n += 1
 
+        success = 1
         for item in targets:
             if operation == "1": # Give and Enable Tags
-                print(item)
-                flash("Tags DATADISK, METADATADISK given to disk: " + str(item[0]), category="message")
-                # Change as you like, tags are auto enabled so be careful, usually first two.
-                op.give_disk_tag_by_id(url, port, key, item, tag="DATA_DISK")
-                op.give_disk_tag_by_id(url, port, key, item, tag="METADATA_DISK")
+                log1 = op.give_disk_tag_by_id(url, port, key, item, tag="DATA_DISK")
+                log2 = op.give_disk_tag_by_id(url, port, key, item, tag="METADATA_DISK")
                 # op.give_disk_tag_by_id(url, port, key, item, tag="READ_CACHE")
                 # op.give_disk_tag_by_id(url, port, key, item, tag="WRITE_CACHE")
-                # if log.text != "":
-                #    flash(log.json())
-            elif operation == "2": # Disable Tags
-                pass
+                if log1.ok and log2.ok:
+                    pass
+                else:
+                    success = 0
+                    flash(log1.json(), category="error")
+                    flash(log2.json(), category="error")
+            elif operation == "2": # Delete and Disable Tags
+                log1 = op.remove_datadisk_tag_by_id(url, port, key, item, tag="DATA_DISK")
+                log2 = op.remove_metadisk_tag_by_id(url, port, key, item, tag="METADATA_DISK")
+                if log1.ok and log2.ok:
+                    pass
+                else:
+                    success = 0
+                    flash(log1.json(), category="error")
+                    flash(log2.json(), category="error")
             elif operation == "3": # 
-                pass
+                op.remove_metadisk_tag_by_id
             elif operation == "4":
                 pass
-
-        # flash(operation)
-        # flash(disk_list)
+        if success:
+            flash("OK")
 
     return render_template("manage.html", user=current_user, disks=session["disk_list"])
