@@ -30,7 +30,7 @@ from utils.Utils import SingletonObject, CustomBase
 # Requester stage III: actual request sent, and after response received
 # Requester stage IV: every pipeline are called with invoke_after_request
 
-# stage IV: a object named ```self.__class__.__name__.removesuffix("Operation") + "Response"``` will be created
+# stage IV: an object named ```self.__class__.__name__.removesuffix("Operation") + "Response"``` will be created
 # stage V: data from requester will be parsed to the Response object, strictly typed
 #
 # You can mark Operation objects as SingletonObject, but it may affect IDE behavior(type hint and auto complete)
