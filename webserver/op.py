@@ -1,36 +1,13 @@
 from pip import main
 import requests.exceptions
 import requests as req
+from operation.Operation import *
 
-
-class Cluster:
-    def __init__(self, id):
-        self.id = id
-        self.hosts = []
-        self.attributes = {}
-
-
-class Host:
-    def __init__(self, id):
-        self.id = id
-        self.disks = []
-        self.attributes = {}
-
-
-class Disk:
-    def __init__(self, id):
-        self.id = id
-        self.attributes = {}
-
-
-def get_token(link, portal):    # Gets token on one call
-    token_data = {"grant_type": "password",
-                  "username": "admin", "password": "Hello123!"}
-    token_header = {"Content-Type": "application/x-www-form-urlencoded"}
-    token = req.post(url=link+":"+portal+"/oauth/token", data=token_data, headers=token_header, auth=(
-        "hcd-client", "hcd-secret"), verify=False)  # data: form in insomnia, auth: HTTPbasic ("user", "password")
-    return token.json()["access_token"]
-
+#
+# Deprecated Warning
+# This file was used for Compatibility
+# Should refer to /operation/Operation.py
+#
 
 def get_all_clusters(link, portal, key):
     tmp = req.get(url=link+":"+portal+"/v1/clusters",
@@ -49,32 +26,12 @@ def get_all_cluster_id_from_response(res: req.Response):
     return ans
 
 
-def get_cluster_by_id(link, portal, key, id: str):
-    tmp = req.get(url=link+":"+portal+"/v1/clusters"+"/"+id,
-                  headers={"Authorization": "bearer" + str(key)}, verify=False)
-    return tmp
-
-
-def get_all_host(link, portal, key):
-    tmp = req.get(url=link+":"+portal+"/v1/hosts",
-                  headers={"Authorization": "bearer" + str(key)}, verify=False)
-    return tmp
-
-
-def get_all_free_hosts(link, portal, key):
-    free_param = {"onlyFreeHost": "true"}
-    tmp = req.get(url=link+":"+portal+"/v1/hosts", data=free_param,
-                  headers={"Authorization": "bearer" + str(key)}, verify=False)
-    return tmp
-
-
 def get_hosts_by_cluster_id(link, portal, key, id: str):
     id_param = {"clusterId": id}
     tmp = req.get(url=link+":"+portal+"/v1/hosts",
                   data=id_param,
                   headers={"Authorization": "bearer" + str(key)}, verify=False)
     return tmp
-
 
 def get_disks_by_host_id(link, portal, key, id: str):
     tmp = req.get(url=link+":"+portal+"/v1/disks/by-host/"+id,
@@ -104,40 +61,60 @@ def get_all_disk_id_from_response(res: req.Response):
     return ans
 
 
-def get_all_attributes_from_response(res: req.Response):
-    attr = {}
-    for label, content in res.json().items():
-        if label == "data":
-            for any_info in content:
-                for a, b in any_info.items():
-                    attr[a] = b
-    return attr
+class DummyResponse:
+    def __init__(self, ok:bool, content:str):
+        self.ok:bool = ok
+        self.content:str = content
+
+    def json(self):
+        return self.content
 
 
-def give_disk_tag_by_id(link, portal, key, disk: list, tag):
-    id_param = {"hostId": disk[1], "diskIds": [disk[0]], "diskTag": tag}
-    tmp = req.post(url=link+":"+portal+"/v1/disks/tag/auto-enable",
-                   headers={"Authorization": "bearer" + str(key), "Content-Type": "application/json; charset=utf8"}, json=id_param, verify=False)
-    return tmp
+def give_disk_tag_by_id(link, port, disk: list, tag) -> DummyResponse:
+    try:
+        op = GiveDiskTagByIdOperation(
+            host=link + ":" + str(port)
+        ).invoke(GiveDiskTagByIdRequest(
+            hostId=disk[1],
+            diskIds=[disk[0]],
+            diskTag=tag
+        ))
+        return DummyResponse(True, str(op))
+    except Exception as e:
+        return DummyResponse(False, str(e))
 
 
-def remove_datadisk_tag_by_id(link, portal, key, disk, tag):
-    tmp = req.delete(url=link+":"+portal+"/v1/disks/tag/auto-disable/"+disk[1]+"/"+disk[0]+"/"+tag,
-                     headers={"Authorization": "bearer" +
-                              str(key), "Content-Type": "application/json; charset=utf8"},
-                     verify=False)
-    return tmp
+def remove_datadisk_tag_by_id(link, port, disk, tag) -> DummyResponse:
+    try:
+        op = RemoveDiskTagByIdOperation(
+            host=link + ":" + str(port)
+        ).invoke(RemoveDiskTagByIdRequest(
+            hostId=disk[1],
+            diskIds=[disk[0]],
+            diskTag=tag
+        ))
+        return DummyResponse(True, str(op))
+    except Exception as e:
+        return DummyResponse(False, str(e))
 
 
-def remove_metadisk_tag_by_id(link, portal, key, disk, tag):
-    tmp = req.delete(url=link+":"+portal+"/v1/disks/tag/auto-disable/"+disk[1]+"/"+disk[0]+"/"+tag,
-                     headers={"Authorization": "bearer" +
-                              str(key), "Content-Type": "application/json; charset=utf8"},
-                     verify=False)
-    return tmp
 
+def generate_list(link, port):
+    main_list = []
+    server_host = link + ":" + str(port)
 
-def generate_list(link, portal, key):
+    for cluster in GetAllClustersOperation(server_host).invoke(GetAllClustersRequest()).data:
+        for host in GetAllHostOperation(server_host).invoke(GetAllHostRequest(clusterId=cluster.clusterId)).data:
+            for disk in GetDisksByHostIdOperation(server_host).invoke(GetDisksByHostIdRequest(hostId=host.hostId)).data:
+                main_list.append([
+                    disk.diskId,
+                    host.hostId,
+                    cluster.clusterId
+                ])
+
+    return main_list
+
+def generate_list_old(link, portal, key):
     main_list = []
     ask1 = get_all_clusters(link, portal, key)
     clusters = get_all_cluster_id_from_response(ask1)
@@ -150,3 +127,4 @@ def generate_list(link, portal, key):
             for disk in disks:
                 main_list.append([disk, host, cluster])
     return main_list
+

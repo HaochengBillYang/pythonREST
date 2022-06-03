@@ -8,7 +8,7 @@ from operation.Operation import *
 op = GetAllHostOperation(
     host="https://172.16.4.248:8443"
 ).invoke(GetAllHostRequest(
-    onlyFreeHost=True
+    clusterId="60bf5cf5-e510-4960-8f53-b85396e03541"
 ))
 
 print(op.data)

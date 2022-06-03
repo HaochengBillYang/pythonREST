@@ -35,7 +35,7 @@ class Operation:
                 results = json.loads(results)
             return kclass(**results)
         else:
-            raise Exception("Status Error")
+            raise Exception("Status Error : " + response.return_data)
 
 
 # Login
@@ -137,6 +137,7 @@ class GetAllHostOperation(Operation):
         )
 
     def invoke(self, request: GetAllHostRequest) -> GetAllHostResponse:
+        #self.path += "?clusterId=" + request.clusterId
         return super().invoke(request)
 
 

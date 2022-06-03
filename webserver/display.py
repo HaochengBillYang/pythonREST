@@ -26,8 +26,7 @@ def manage():
     port = session["port"]
     url = session["url"]
     try:
-        key = op.get_token(url, port)
-        session["disk_list"] = op.generate_list(url, port, key)
+        session["disk_list"] = op.generate_list(url, port)
         # Data structure is [disk, host, cluster], [disk, host, cluster]
 
     except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
@@ -49,9 +48,9 @@ def manage():
         for item in targets:
             if operation == "1":  # Give and Enable Tags
                 log1 = op.give_disk_tag_by_id(
-                    url, port, key, item, tag="DATA_DISK")
+                    url, port, item, tag="DATA_DISK")
                 log2 = op.give_disk_tag_by_id(
-                    url, port, key, item, tag="METADATA_DISK")
+                    url, port, item, tag="METADATA_DISK")
                 # op.give_disk_tag_by_id(url, port, key, item, tag="READ_CACHE")
                 # op.give_disk_tag_by_id(url, port, key, item, tag="WRITE_CACHE")
                 if log1.ok and log2.ok:
@@ -62,9 +61,9 @@ def manage():
                     flash(log2.json(), category="error")
             elif operation == "2":  # Delete and Disable Tags
                 log1 = op.remove_datadisk_tag_by_id(
-                    url, port, key, item, tag="DATA_DISK")
-                log2 = op.remove_metadisk_tag_by_id(
-                    url, port, key, item, tag="METADATA_DISK")
+                    url, port, item, tag="DATA_DISK")
+                log2 = op.remove_datadisk_tag_by_id(
+                    url, port, item, tag="METADATA_DISK")
                 if log1.ok and log2.ok:
                     pass
                 else:
