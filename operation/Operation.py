@@ -57,9 +57,10 @@ class Operation:
             .add_pipeline(SimpleLogger(self.__class__.__name__)) \
             .send(self.host, self.path)
 
+        module_name = self.__class__.__name__.removesuffix("Operation")
+
         if response.return_code < 400:
             try:
-                module_name = self.__class__.__name__.removesuffix("Operation")
                 class_name = module_name + "Response"
                 kclass = loader.load(module_name, class_name)
                 results = response.return_data
@@ -69,6 +70,9 @@ class Operation:
                     results = json.loads(results)
                 return kclass(**results)
             except Exception as e:
-                print(e.__class__)
+                if e is ModuleNotFoundError:
+                    raise e
+                else:
+                    raise Exception("Failed to deserialize " + response.return_data + " as " + module_name)
         else:
             raise Exception("Status Error : " + response.return_data)
