@@ -64,4 +64,6 @@ def generate_list(link, port):
                     cluster.clusterId
                 })
 
+    print("successfully returned")
+    print(main_list)
     return main_list

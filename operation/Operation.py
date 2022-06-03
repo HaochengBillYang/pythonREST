@@ -58,14 +58,17 @@ class Operation:
             .send(self.host, self.path)
 
         if response.return_code < 400:
-            module_name = self.__class__.__name__.removesuffix("Operation")
-            class_name = module_name + "Response"
-            kclass = loader.load(module_name, class_name)
-            results = response.return_data
-            if results == "":
-                results = {}
-            else:
-                results = json.loads(results)
-            return kclass(**results)
+            try:
+                module_name = self.__class__.__name__.removesuffix("Operation")
+                class_name = module_name + "Response"
+                kclass = loader.load(module_name, class_name)
+                results = response.return_data
+                if results == "":
+                    results = {}
+                else:
+                    results = json.loads(results)
+                return kclass(**results)
+            except Exception as e:
+                print(e.__class__)
         else:
             raise Exception("Status Error : " + response.return_data)
