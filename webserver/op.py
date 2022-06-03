@@ -58,12 +58,11 @@ def generate_list(link, port):
     for cluster in GetAllClustersOperation(server_host).invoke(GetAllClustersRequest()).data:
         for host in GetAllHostOperation(server_host).invoke(GetAllHostRequest(clusterId=cluster.clusterId)).data:
             for disk in GetDisksByHostIdOperation(server_host).invoke(GetDisksByHostIdRequest(hostId=host.hostId)).data:
-                main_list.append({
+                main_list.append([
                     disk.diskId,
                     host.hostId,
                     cluster.clusterId
-                })
+                ])
 
-    print("successfully returned")
     print(main_list)
     return main_list
