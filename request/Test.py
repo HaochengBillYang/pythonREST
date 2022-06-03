@@ -1,6 +1,12 @@
 import json
 from typing import TypeVar
 import urllib3
+
+from operation.disk.GetDisksByHostId import GetDisksByHostIdOperation, GetDisksByHostIdRequest
+from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
+from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdOperation, RemoveDiskTagByIdRequest
+from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from operation.Operation import *
