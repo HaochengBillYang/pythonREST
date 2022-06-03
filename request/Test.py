@@ -8,6 +8,7 @@ from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTag
 from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdOperation, RemoveDiskTagByIdRequest
 from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
 from operation.volume.CreateVolume import CreateVolumeOperation, CreateVolumeRequest
+from operation.volume.DeleteVolume import DeleteVolumeOperation, DeleteVolumeRequest
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -29,4 +30,13 @@ op0 = CreateVolumeOperation(
     type="NORMAL"
 ))
 
-print(op0)
+op2 = DeleteVolumeOperation(
+    host="https://172.16.4.248:8443"
+).invoke(DeleteVolumeRequest(
+    clusterId = op1.data[0].clusterId,
+    byName=True,
+    volumeIdOrNameList = ["test"],
+    force=False
+))
+
+print(op2)
