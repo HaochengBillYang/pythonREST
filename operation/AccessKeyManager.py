@@ -1,6 +1,5 @@
 import time
 from typing import Optional
-
 from pydantic import BaseModel
 
 
@@ -14,7 +13,7 @@ class AccessKey(BaseModel):
 
 
 class AccessKeyManager:
-    keys: dict[str, AccessKey] = {}
+    keys: dict[str, AccessKey] = {} 
 
     @staticmethod
     def findAccessKeyByHost(host: str) -> Optional[AccessKey]:

@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional # Data type of either None or inputed value
 
 from pydantic import BaseModel
 
@@ -66,7 +66,7 @@ class LoginOperation(Operation):
 
 # KeyExchangePipeline
 class KeyExchangePipeline(Pipeline):
-    def invoke_before_request(self, request: "Request"):
+    def invoke_before_request(self, request: "Request"):  
         key = AccessKeyManager.findAccessKeyByHost(request.host)
         if key is None:
             login_result = LoginOperation(host=request.host).invoke(
