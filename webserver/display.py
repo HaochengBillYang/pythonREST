@@ -74,3 +74,9 @@ def manage():
             flash("OK")
 
     return render_template("manage.html", user=current_user, disks=session["disk_list"])
+
+@display.route("/user", methods=["GET", "POST"])
+@login_required
+def user():
+    flash("user page reached")
+    return render_template("user.html", user=current_user)
