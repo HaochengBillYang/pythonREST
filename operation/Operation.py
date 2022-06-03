@@ -73,6 +73,6 @@ class Operation:
                 if e is ModuleNotFoundError:
                     raise e
                 else:
-                    raise Exception("Failed to deserialize " + response.return_data + " as " + module_name)
+                    raise Exception("Failed to deserialize {0} as {1}".format(response.return_data, module_name))
         else:
-            raise Exception("Status Error : " + response.return_data)
+            raise Exception("Status Error ({0}): {1}".format(str(response.return_code), response.return_data))

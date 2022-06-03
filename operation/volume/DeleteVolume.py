@@ -15,6 +15,7 @@ class DeleteVolumeRequest(BaseModel):
 class DeleteVolumeResponse(BaseModel):
     pass
 
+
 class DeleteVolumeOperation(Operation):
     def __init__(self, host: str):
         super().__init__(
