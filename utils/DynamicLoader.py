@@ -31,6 +31,7 @@ class DynamicLoader(object):
 
     def load(self, module_name: str, class_name: str):
         kmodule = self.module_list.get(module_name)
+        print("module " + kmodule)
         kmodule = importlib.import_module(kmodule)
         if kmodule is None:
             raise Exception("Could not found {0} under {1}".format(module_name, self.root))
