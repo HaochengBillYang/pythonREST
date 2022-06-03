@@ -41,8 +41,6 @@ from utils.Utils import SingletonObject, CustomBase
 # Typical usage of pipeline: SimpleLogger and KeyExchangePipeline(down below)
 
 
-
-
 class Operation:
     def __init__(self, host: str, path: str, requester: Request):
         self.host = host
