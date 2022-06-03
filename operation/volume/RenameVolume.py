@@ -8,7 +8,7 @@ from request.pipelines.KeyExchange import KeyExchangePipeline
 class RenameVolumeRequest(BaseModel):
     clusterId: str
     volumeId: str
-    volumeName: str ## new name
+    volumeName: str  # new name
 
 
 class RenameVolumeResponse(BaseModel):
@@ -26,4 +26,3 @@ class RenameVolumeOperation(Operation):
     def invoke(self, request: RenameVolumeRequest) -> RenameVolumeResponse:
         return super().invoke(request)
 
-    
