@@ -20,9 +20,9 @@ def home():
 
 
 # Say what method is allowed here
-@display.route("/manage", methods=["GET", "POST"])
+@display.route("/disk", methods=["GET", "POST"])
 @login_required
-def manage():
+def disk():
     port = session["port"]
     url = session["url"]
     try:
@@ -73,10 +73,22 @@ def manage():
         if success:
             flash("OK")
 
-    return render_template("manage.html", user=current_user, disks=session["disk_list"])
+    return render_template("disk.html", user=current_user, disks=session["disk_list"])
 
 @display.route("/user", methods=["GET", "POST"])
 @login_required
 def user():
     flash("user page reached")
     return render_template("user.html", user=current_user)
+
+@display.route("/volume", methods=["GET", "POST"])
+@login_required
+def volume():
+    flash("volume page reached")
+    return render_template("volume.html", user=current_user)
+
+@display.route("/manage", methods=["GET", "POST"])
+@login_required
+def manage():
+    flash("manage page reached")
+    return render_template("manage.html", user=current_user)
