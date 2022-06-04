@@ -1,3 +1,4 @@
+from time import sleep
 from typing import Optional
 from pydantic import BaseModel
 
@@ -7,14 +8,14 @@ from request.pipelines.KeyExchange import KeyExchangePipeline
 from utils.Utils import CustomBase
 
 
-class TraceTaskRequest(CustomBase):
+class TraceUntilCompleteRequest(CustomBase):
     taskId: str
 
     class Config:
         exclude = {"taskId"}
 
 
-class TraceTaskResponse(BaseModel):
+class TraceUntilCompleteResponse(BaseModel):
     progress: int
     taskName: str
     statusName: Optional[str]
@@ -23,7 +24,7 @@ class TraceTaskResponse(BaseModel):
     startTime: int
 
 
-class TraceTaskOperation(Operation):
+class TraceUntilCompleteOperation(Operation):
     def __init__(self, host: str):
         super().__init__(
             host=host,
@@ -31,7 +32,12 @@ class TraceTaskOperation(Operation):
             requester=RestRequest(method=Method.GET).add_pipeline(KeyExchangePipeline())
         )
 
-    def invoke(self, request: TraceTaskRequest) -> TraceTaskResponse:
+    def invoke(self, request: TraceUntilCompleteRequest) -> TraceUntilCompleteResponse:
         self.path += request.taskId
-        return super().invoke(request)
+        while True:
+            response = super().invoke(request)
 
+            if response.progress == 100:
+                return response
+            else:
+                sleep(2)

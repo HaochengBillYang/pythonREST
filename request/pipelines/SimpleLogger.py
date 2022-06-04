@@ -14,8 +14,8 @@ class SimpleLogger(Pipeline):
         print(color.to_code() + "[" + self.logger_name, date_time + message, ColorCode.RESET.to_code())
 
     def invoke_before_request(self, request: Request):
-        self.logger(ColorCode.BLUE, " >> " + request.url + " ;data = " + str(request.data))
+        self.logger(ColorCode.BLUE, " >> " + request.path + " ;data = " + str(request.data))
 
     def invoke_after_request(self, request: Request, response: Response):
-        self.logger(ColorCode.GREEN, " << " + request.url + " ;code = " + str(
+        self.logger(ColorCode.GREEN, " << " + request.path + " ;code = " + str(
             response.return_code) + " ;data = " + response.return_data)

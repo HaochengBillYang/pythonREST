@@ -13,6 +13,7 @@ class DeleteVolumeRequest(BaseModel):
 
 
 class DeleteVolumeResponse(BaseModel):
+    taskId: str
     pass
 
 
@@ -21,7 +22,8 @@ class DeleteVolumeOperation(Operation):
         super().__init__(
             host=host,
             path="/v1/volumes/multi-delete",
-            requester=RestRequest(method=Method.DELETE).add_pipeline(KeyExchangePipeline())
+            # method DELETE not supported
+            requester=RestRequest(method=Method.PUT).add_pipeline(KeyExchangePipeline())
         )
 
     def invoke(self, request: DeleteVolumeRequest) -> DeleteVolumeResponse:

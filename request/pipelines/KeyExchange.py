@@ -11,7 +11,7 @@ class KeyExchangePipeline(Pipeline):
                 LoginRequest(username="admin", password="Hello123!")
             )
             AccessKeyManager.addAccessKey(host=request.host,
-                                          key_string=login_result.token_type + login_result.access_token,
+                                          key_string=login_result.token_type + " " + login_result.access_token,
                                           key_expire_in=login_result.expires_in)
             key = AccessKeyManager.findAccessKeyByHost(request.host)
         if key is None:

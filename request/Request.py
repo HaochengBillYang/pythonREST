@@ -87,6 +87,18 @@ class Method(Enum):
     DELETE = 3
     PATCH = 4
 
+    def __str__(self) -> str:
+        if self == Method.GET:
+            return "GET"
+        elif self == Method.PATCH:
+            return "PATCH"
+        elif self == Method.PUT:
+            return "PUT"
+        elif self == Method.DELETE:
+            return "DELETE"
+        elif self == Method.POST:
+            return "POST"
+
 
 class RestRequest(Request):
     def __init__(self, method: Method):

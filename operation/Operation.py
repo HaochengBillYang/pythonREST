@@ -2,6 +2,7 @@ import json
 import os
 
 from request.Request import Request
+from request.pipelines.SyncDebugLogger import SyncDebugLogger
 from request.pipelines.SimpleLogger import SimpleLogger
 
 from utils.DynamicLoader import DynamicLoader
@@ -37,6 +38,9 @@ from utils.DynamicLoader import DynamicLoader
 # pipelines are called before and after actual HTTP request, pipelines can modify request/response object
 # Typical usage of pipeline: SimpleLogger and KeyExchangePipeline(down below)
 
+# Choose between SimpleLogger and SyncDebugLogger
+LOGGER = SyncDebugLogger
+
 loader = DynamicLoader(os.path.dirname(__file__))
 
 
@@ -54,7 +58,7 @@ class Operation:
                 self.requester.add_data(k, data[k])
 
         response = self.requester \
-            .add_pipeline(SimpleLogger(self.__class__.__name__)) \
+            .add_pipeline(LOGGER(self.__class__.__name__)) \
             .send(self.host, self.path)
 
         module_name = self.__class__.__name__.removesuffix("Operation")
