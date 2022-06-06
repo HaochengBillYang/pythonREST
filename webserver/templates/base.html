@@ -2,10 +2,13 @@
 <html>
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css"
+  crossorigin="anonymous"/>
+  <script src="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/js/mdui.min.js" crossorigin="anonymous"></script>
+  <meta name=”viewport” content=”width=device-width, minimum-scale=1.0,user-scalable=yes”>
   <style>
     input.largerCheckbox {
       position: relative;
@@ -43,11 +46,6 @@
       color:#0C0E12;
       font-family: Arial, sans-serif;
     }
-    a{
-      color: #0C0E12 !important;
-      font-family: Arial, sans-serif;
-      font-size: 1.5vh;
-    }
     button:hover{
       background-color:#FCD535!important;
     }
@@ -55,64 +53,71 @@
   <title>{% block title %}Home{% endblock %}</title>
 </head>
 
-<body class="mdui-typo" style="background-color: #EAECEF">
-  <div class="mdui-toolbar">
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
-      <i class="mdui-icon material-icons">menu</i>
-    </a>
-    <span class="mdui-typo-title">Title</span>
-    <div class="mdui-toolbar-spacer"></div>
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
-      <i class="mdui-icon material-icons">search</i>
-    </a>
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
-      <i class="mdui-icon material-icons">refresh</i>
-    </a>
-    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
-      <i class="mdui-icon material-icons">more_vert</i>
-    </a>
-  </div>
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1E2329 !important">
-    <span class="navbar-brand" style="font-family: Arial, sans-serif; color:#F9BA16";>
-      <img src="{{url_for('static',filename='logo.svg')}}" width="30" height="30" style="position:relative; top: -3px;">
-      DEV
+<body class="mdui-theme-layout-dark mdui-theme-accent-orange mdui-theme-primary-orange">
+  <div class="mdui-toolbar mdui-color-theme">
+    <span style="height: 100%">
+        <img src="{{url_for('static',filename='logo.svg')}}" style="height: 50%; margin-top: 50%">
     </span>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbar"  >
-      <div class="navbar-nav" style="color: #EA7B99">
-        {% if user.is_authenticated %}
-        <a class="nav-item nav-link" id="home" href="/">Home</a>
-        <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
-        <a class="nav_item nav-link" id="User" href="/user">User</a>
-        {% else %}
-        <a class="nav-item nav-link" id="login" href="/login">Login</a>
-        <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
-        {% endif %}
-      </div>
+    <span class="mdui-typo-title"> Dev </span>
+    <div class="mdui-toolbar-spacer"></div>
+    {% if user.is_authenticated %}
+    <div>
+        <button id="open" class="mdui-btn mdui-btn-icon"  mdui-tooltip="{content: 'Home Page'}" onclick = "location.href = '/';">
+            <i class="mdui-icon material-icons">&#xe88a;</i>
+        </button>
     </div>
-  </nav>
+    <div>
+        <ul class="mdui-menu" id="menu">
+            <li class="mdui-menu-item">
+                <a href="/user" class="mdui-ripple">
+                    <i class="mdui-menu-item-icon mdui-icon material-icons">&#xe8b8;</i>Preferences
+                </a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple">
+                    <i class="mdui-menu-item-icon mdui-icon material-icons">&#xe869;</i>Advanced
+                </a>
+            </li>
+            <li class="mdui-divider"></li>
+            <li class="mdui-menu-item">
+                <a href="/logout" class="mdui-ripple">
+                    <i class="mdui-menu-item-icon"></i>Sign Out
+                </a>
+            </li>
+        </ul>
+        <button id="open" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#menu'}">
+            <i class="mdui-icon material-icons">&#xe7fd;</i>
+        </button>
+    </div>
+    {%else%}
+    <div>
+      <button id="open" class="mdui-btn mdui-btn-icon"  mdui-tooltip="{content: 'Sign Up'}" onclick = "location.href = '/sign-up';">
+        <i class="mdui-icon material-icons">&#xe145;</i>
+      </button>
+      <button id="open" class="mdui-btn mdui-btn-icon"  mdui-tooltip="{content: 'Login'}" onclick = "location.href = '/login';">
+          <i class="mdui-icon material-icons">&#xe88a;</i>
+      </button>
+    </div>
+    {%endif%}
 
-
-  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %} {% if
   messages %} {% for category, message in messages %} {% if category ==
   "error" %}
-  <div class="alert alert-danger alter-dismissable fade show" role="alert">
+  <div class="mdui-card" role="alert">
     {{ message }}
     <button type="button" class="close" data-dismiss="alert">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   {% else %}
-  <div class="alert alert-success alter-dismissable fade show" role="alert">
+  <div class="mdui-card" role="alert">
     {{ message }}
     <button type="button" class="close" data-dismiss="alert">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  {% endif %} {% endfor %} {% endif %} {% endwith %}
+{% endif %} {% endfor %} {% endif %} {% endwith %}
 
   <div class="container">{% block content %} {% endblock %}</div>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
