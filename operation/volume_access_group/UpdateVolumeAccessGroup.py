@@ -8,26 +8,25 @@ from request.pipelines.KeyExchange import KeyExchangePipeline
 from utils.Structs import Initiator, Volume
 
 
-class CreateVolumeAccessGroupRequest(BaseModel):
+class UpdateVolumeAccessGroupRequest(BaseModel):
+    volumeAccessGroupId: str
     volumeAccessGroupName: str
     clusterId: str
-    initiators: list[Initiator]
     volumes: list[Volume]
 
 
-class CreateVolumeAccessGroupResponse(BaseModel):
+class UpdateVolumeAccessGroupResponse(BaseModel):
     pass
 
 
-class CreateVolumeAccessGroupOperation(Operation):
+class UpdateVolumeAccessGroupOperation(Operation):
     def __init__(self, host: str):
         super().__init__(
             host=host,
-            path="/v1/volume-access-groups",
-            requester=RestRequest(method=Method.POST).add_pipeline(KeyExchangePipeline())
+            path="v1/volume-access-groups",
+            requester=RestRequest(method=Method.PUT).add_pipeline(KeyExchangePipeline())
         )
 
-    def invoke(self, request: CreateVolumeAccessGroupRequest) -> CreateVolumeAccessGroupResponse:
+    def invoke(self, request: UpdateVolumeAccessGroupRequest) -> UpdateVolumeAccessGroupResponse:
         return super().invoke(request)
-
 
