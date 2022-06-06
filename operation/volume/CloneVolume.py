@@ -1,8 +1,8 @@
 from typing import Optional
 
+from operation import Operation
 from pydantic import BaseModel
 
-from operation.Operation import Operation
 from request.Request import RestRequest, Method
 from request.pipelines.KeyExchange import KeyExchangePipeline
 
