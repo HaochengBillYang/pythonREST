@@ -4,35 +4,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.js"></script>
   <style>
     input.largerCheckbox {
       position: relative;
       top: 3px;
-      width: 20px;
-      height: 20px;
+      width: 1.5vw;
+      height: 1.5vh;
+    }
+    input.form-control:focus{
+      color: #F9BA16;
+      border-width: 0.1vh;
+      border-color: #F9BA16;
+      box-shadow: none;
     }
     h1{
-      color: aliceblue;
+      color: #0C0E12;
+      font-family: Arial, sans-serif;
+    }
+    h2{
+      color: #0C0E12;
+      font-family: Arial, sans-serif;
+    }
+    h3{
+      color: #0C0E12;
+      font-family: Arial, sans-serif;
+    }
+    h4{
+      color: #0C0E12;
+      font-family: Arial, sans-serif;
     }
     h5{
-      color:aliceblue;
+      color: #0c0e12;
+      font-family: Arial, sans-serif;
     }
     label{
-      color:aliceblue;
+      color:#0C0E12;
+      font-family: Arial, sans-serif;
+    }
+    a{
+      color: #0C0E12 !important;
+      font-family: Arial, sans-serif;
+      font-size: 1.5vh;
+    }
+    button:hover{
+      background-color:#FCD535!important;
     }
   </style>
   <title>{% block title %}Home{% endblock %}</title>
 </head>
 
-<body style="background-color: #3e3e3e">
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #EA7B99 !important">
-    <span class="navbar-brand mb-0 h1">
+<body class="mdui-typo" style="background-color: #EAECEF">
+  <div class="mdui-toolbar">
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
+      <i class="mdui-icon material-icons">menu</i>
+    </a>
+    <span class="mdui-typo-title">Title</span>
+    <div class="mdui-toolbar-spacer"></div>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
+      <i class="mdui-icon material-icons">search</i>
+    </a>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
+      <i class="mdui-icon material-icons">refresh</i>
+    </a>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon">
+      <i class="mdui-icon material-icons">more_vert</i>
+    </a>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1E2329 !important">
+    <span class="navbar-brand" style="font-family: Arial, sans-serif; color:#F9BA16";>
       <img src="{{url_for('static',filename='logo.svg')}}" width="30" height="30" style="position:relative; top: -3px;">
-      DMS Beta
+      DEV
     </span>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
       <span class="navbar-toggler-icon"></span>
