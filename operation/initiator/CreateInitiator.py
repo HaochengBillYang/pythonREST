@@ -1,30 +1,29 @@
-from typing import Optional
-
-from operation import Operation
 from pydantic import BaseModel
 
+from operation.Operation import Operation
 from request.Request import RestRequest, Method
 from request.pipelines.KeyExchange import KeyExchangePipeline
 
 
-class CloneVolumeRequest(BaseModel):
-    clusterId: str
-    volumeId: str
-    parentSnapshotId: str
-    type: Optional[str]
+class CreateInitiatorRequest(BaseModel):
+    iqn: str
+    initiatorName: str
 
 
-class CloneVolumeResponse(BaseModel):
+class CreateInitiatorResponse(BaseModel):
     pass
 
 
-class CloneVolumeOperation(Operation):
+class CreateInitiatorOperation(Operation):
     def __init__(self, host: str):
         super().__init__(
             host=host,
-            path="/v1/volumes/task/clone",
+            path="v1/initiators",
             requester=RestRequest(method=Method.POST).add_pipeline(KeyExchangePipeline())
         )
 
-    def invoke(self, request: CloneVolumeRequest) -> CloneVolumeResponse:
+    def invoke(self, request: CreateInitiatorRequest) -> CreateInitiatorResponse:
         return super().invoke(request)
+
+
+

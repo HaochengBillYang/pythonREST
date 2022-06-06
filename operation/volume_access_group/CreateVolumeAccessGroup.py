@@ -5,26 +5,29 @@ from pydantic import BaseModel
 
 from request.Request import RestRequest, Method
 from request.pipelines.KeyExchange import KeyExchangePipeline
+from utils.Structs import Initiator, Volume
 
 
-class CloneVolumeRequest(BaseModel):
+class CreateVolumeAccessGroupRequest(BaseModel):
+    volumeAccessGroupName: str
     clusterId: str
-    volumeId: str
-    parentSnapshotId: str
-    type: Optional[str]
+    initiators: list[Initiator]
+    volumes: list[Volume]
 
 
-class CloneVolumeResponse(BaseModel):
+class CreateVolumeAccessGroupResponse(BaseModel):
     pass
 
 
-class CloneVolumeOperation(Operation):
+class CreateVolumeAccessGroupOperation(Operation):
     def __init__(self, host: str):
         super().__init__(
             host=host,
-            path="/v1/volumes/task/clone",
+            path="/v1/volume-access-groups",
             requester=RestRequest(method=Method.POST).add_pipeline(KeyExchangePipeline())
         )
 
-    def invoke(self, request: CloneVolumeRequest) -> CloneVolumeResponse:
+    def invoke(self, request: CreateVolumeAccessGroupRequest) -> CreateVolumeAccessGroupResponse:
         return super().invoke(request)
+
+
