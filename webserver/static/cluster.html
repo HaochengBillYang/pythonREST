@@ -54,7 +54,7 @@
             }
         }
 
-        .tag-list > i{
+        .tag-list > i {
             margin-left: 3px;
             margin-right: 3px;
         }
@@ -68,6 +68,7 @@
     <script>
         let vm = null
         let app = null
+        let clusterId = null
 
         function register_checkbox_manager() {
             let host_checkbox = $(".host-checkbox")
@@ -85,6 +86,7 @@
                 subs.prop("checked", new_value)
             })
         }
+
         let hosts = []
 
         function load_host_list() {
@@ -139,7 +141,7 @@
 
             app = Vue.createApp(SourceData)
             app.component('disk', {
-                props: ['disk_info','host_id'],
+                props: ['disk_info', 'host_id'],
                 template: '#disk-template'
             })
             app.component('host', {
@@ -149,16 +151,16 @@
             vm = app.mount('#disk-management')
         }
 
-        function start_loading(){
+        function start_loading() {
             $("#loading").show()
         }
 
-        function end_loading(){
-             $("#loading").hide()
+        function end_loading() {
+            $("#loading").hide()
         }
 
 
-        function custom_ajax(path, method, data, receiver){
+        function custom_ajax(path, method, data, receiver) {
             start_loading()
 
             let x = new XMLHttpRequest();
@@ -170,30 +172,53 @@
 
 
             x.onreadystatechange = function () {
-            if (x.readyState === 4) {
-                end_loading()
-                try{
-                    let res = JSON.parse(x.responseText);
-                    if(res.success && res.success === true){
-                         receiver(res.data)
+                if (x.readyState === 4) {
+                    end_loading()
+                    let text = x.responseText
+                    try {
+                        let res = JSON.parse(text);
+                        if (res.success && res.success === true) {
+                            receiver(res.data)
+                        } else {
+                            mdui.dialog({
+                                title: 'Failure',
+                                content: res.reason,
+                            });
+                        }
+                    } catch (e) {
+                        mdui.dialog({
+                            title: 'Unknown Response Type',
+                            content: text,
+                        });
                     }
-                }catch (e) {
-
                 }
             }
-
-
-        }
-
-            end_loading()
         }
 
 
-        function update_data(){
-
+        function update_data() {
+            custom_ajax("/cluster/info?id=" + clusterId)
         }
 
         $(window).ready(function () {
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) {
+                        return pair[1];
+                    }
+                }
+                return null;
+            }
+
+
+            clusterId = getQueryVariable("id")
+            if(clusterId == null){
+                window.location.href = "/"
+            }
+
             vue_render()
             register_checkbox_manager()
             load_host_list()
@@ -208,7 +233,7 @@
         <li class="mdui-collapse-item">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-icon material-icons">&#xe2c8;</i>
-                <div class="mdui-list-item-content" style="margin-left: 5px">{{host_id + " (" + host_name + ")" }}
+                <div class="mdui-list-item-content" style="margin-left: 5px">{{ host_id + " (" + host_name + ")" }}
                 </div>
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
                 <label class="mdui-checkbox">
@@ -256,13 +281,13 @@
                                    style="opacity: 0">&#xe417;</i>
                             </span>
 
-            <i mdui-tooltip="{content: 'Serial Number'}">{{disk_info.diskSerialNumber}}</i>
+            <i mdui-tooltip="{content: 'Serial Number'}">{{ disk_info.diskSerialNumber }}</i>
         </div>
         <i v-bind:mdui-tooltip="'{content: \'state: ' + disk_info.state + '<br> mount:' + disk_info.mountPoint +'\'}'"
-               class="mdui-icon material-icons">&#xe88e;</i>
+           class="mdui-icon material-icons">&#xe88e;</i>
 
         <label class="mdui-checkbox">
-            <input type="checkbox" v-bind:disk_id="disk_info.diskId" v-bind:host_id="host_id"  class="disk-checkbox"/>
+            <input type="checkbox" v-bind:disk_id="disk_info.diskId" v-bind:host_id="host_id" class="disk-checkbox"/>
             <i class="mdui-checkbox-icon"></i>
         </label>
     </li>
