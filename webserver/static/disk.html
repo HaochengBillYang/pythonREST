@@ -128,7 +128,7 @@
     <span style="height: 100%">
         <img src="logo.svg" style="height: 85%;margin-top: 7.5%">
     </span>
-    <span class="mdui-typo-title"> Management </span>
+    <span class="mdui-typo-title"> Cluster Management </span>
     <div class="mdui-toolbar-spacer"></div>
     <div>
         <button id="open" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: 'Home Page'}">
@@ -290,6 +290,18 @@
 
                 </ul>
 
+                <div class="mdui-list host-head" mdui-collapse="{}">
+
+                    <div class="mdui-row-xs-2">
+                        <div class="mdui-col">
+                            <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple">Join Host</button>
+                        </div>
+                        <div class="mdui-col">
+                            <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple">Remove Host</button>
+                        </div>
+                    </div>
+
+                </div>
 
             </li>
         </ul>
@@ -299,24 +311,28 @@
         <div class="mdui-typo">
             <blockquote>
                 <footer>
-                 Actions on Selected Disks
-            </footer>
+                    Actions on Selected Disks
+                </footer>
             </blockquote>
         </div>
 
         <ul class="mdui-menu" id="add-tag-menu">
 
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>DATA</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe1af;</i>DATA</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe54e;</i>META</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe54e;</i>META</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe3c9;</i>WRITE</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe3c9;</i>WRITE</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
             </li>
             <li class="mdui-divider"></li>
             <li class="mdui-menu-item">
@@ -332,33 +348,37 @@
 
 
         <ul class="mdui-menu" id="remove-tag-menu">
-
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>DATA</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe1af;</i>DATA</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe54e;</i>META</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe54e;</i>META</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe3c9;</i>WRITE</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe3c9;</i>WRITE</a>
             </li>
             <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                                              mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
             </li>
         </ul>
 
 
-        <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action"  mdui-menu="{target: '#remove-tag-menu'}">Remove Tag</button>
+        <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action"
+                mdui-menu="{target: '#remove-tag-menu'}">Remove Tag
+        </button>
 
 
-         <div class="mdui-typo">
+        <div class="mdui-typo">
             <blockquote>
                 <footer>
-                 Batch Testing
+                    Batch Testing
                 </footer>
             </blockquote>
         </div>
-
 
         <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action">Load From Template</button>
         <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action">Save To Template</button>
