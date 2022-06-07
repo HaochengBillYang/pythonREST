@@ -12,6 +12,7 @@ from operation.disk.GetDisksByHostId import GetDisksByHostIdOperation, GetDisksB
 from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
 from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdRequest, RemoveDiskTagByIdOperation
 from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
+from utils.Structs import DiskInfo
 
 
 class DummyResponse:
@@ -66,3 +67,12 @@ def generate_list(link, port):
 
     print(main_list)
     return main_list
+
+
+def generate_list_on_cluster(link, port, cluster_id) -> dict[str, (str, list[DiskInfo])]:
+    data = {}
+    server_host = link + ":" + str(port)
+    for host in GetAllHostOperation(server_host).invoke(GetAllHostRequest(clusterId=cluster_id)).data:
+        data[host.hostId] = (host.hostName,  GetDisksByHostIdOperation(server_host).invoke(GetDisksByHostIdRequest(hostId=host.hostId)).data)
+    return data
+

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from operation.Operation import Operation
 from request.Request import RestRequest, Method
 from request.pipelines.KeyExchange import KeyExchangePipeline
+from utils.Structs import DiskInfo
 from utils.Utils import CustomBase
 
 
@@ -12,14 +13,6 @@ class GetDisksByHostIdRequest(CustomBase):
 
     class Config:
         exclude = {"hostId"}
-
-
-class DiskInfo(BaseModel):
-    diskId: str
-    mountPoint: str
-    hostId: str
-    state: str
-    diskTagList: list[str]
 
 
 class GetDisksByHostIdResponse(BaseModel):

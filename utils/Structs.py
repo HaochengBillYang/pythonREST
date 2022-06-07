@@ -13,3 +13,11 @@ class Initiator(BaseModel):
     id: str
     iqn: Optional[str]
 
+
+class DiskInfo(BaseModel):
+    diskId: str
+    mountPoint: str
+    hostId: str
+    state: str
+    diskTagList: list[str]
+    diskSerialNumber: str
