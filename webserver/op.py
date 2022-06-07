@@ -83,3 +83,14 @@ def generate_list_on_cluster(link, port, cluster_id) -> list[(str, str, list[dic
 
 def generate_list_on_cluster_to_str(link, port, cluster_id) -> str:
     return json.dumps(generate_list_on_cluster(link, port, cluster_id))
+
+def get_all_clusters(link, port) -> list:
+    main_list = []
+    server_host = link + ":" + str(port)
+    for cluster in GetAllClustersOperation(server_host).invoke(GetAllClustersRequest()).data:
+        main_list.append(
+            cluster.clusterId
+                )
+    return main_list
+    
+

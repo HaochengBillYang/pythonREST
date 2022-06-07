@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 import requests
 from flask_login import login_required, current_user
 from . import op
-from .op import generate_list_on_cluster_to_str, generate_list_on_cluster
+from .op import generate_list_on_cluster_to_str, generate_list_on_cluster, get_all_clusters
 
 display = Blueprint("display", __name__)
 
@@ -97,5 +97,7 @@ def volume():
 @display.route("/manage", methods=["GET", "POST"])
 @login_required
 def manage():
-    flash("manage page reached")
-    return render_template("manage.html", user=current_user)
+    port = session["port"]
+    url = session["url"]
+    session['cluster'] = get_all_clusters(url, port)
+    return render_template("manage.html", user=current_user, cluster = session['cluster'])

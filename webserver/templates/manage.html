@@ -1,11 +1,10 @@
 {%extends "base.html"%}
 {%block content%}
 <div>
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href = '/disk';">Manage Disks</button>
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href = '/sign-up';">Manage Host</button>
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href = '/sign-up';">Manage Cluster</button>
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href = '/sign-up';">Manage Volume</button>
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href = '/sign-up';">Advanced</button>
+    {%for item in cluster%}
+    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" 
+    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "{{'location.href:'+'\'/cluster?id='+item+';\''}}">Cluster: {{item}}</button>
+    {%endfor%}
 </div>
 
 
