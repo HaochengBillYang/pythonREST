@@ -78,3 +78,6 @@ def generate_list_on_cluster(link, port, cluster_id) -> dict[str, (str, list[Dis
     return data
 
 
+def generate_list_on_cluster_to_str(link, port, cluster_id) -> str:
+    return json.dumps(generate_list_on_cluster(link, port, cluster_id))
+

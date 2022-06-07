@@ -2,6 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 import requests
 from flask_login import login_required, current_user
 from . import op
+from .op import generate_list_on_cluster_to_str
 
 display = Blueprint("display", __name__)
 
@@ -29,8 +30,8 @@ def disk():
         session["disk_list"] = op.generate_list(url, port)
         # Data structure is [disk, host, cluster], [disk, host, cluster]
 
-    except requests.exceptions.MissingSchema:       # Invalid URL will throw this exception
-        flash("invalid url", type="error")               # Print Error Message
+    except requests.exceptions.MissingSchema:  # Invalid URL will throw this exception
+        flash("invalid url", type="error")  # Print Error Message
 
     if request.method == "POST":
         operation = request.form.get("submit_button")
@@ -73,7 +74,10 @@ def disk():
         if success:
             flash("OK")
 
-    return render_template("disk.html", user=current_user, disks=session["disk_list"])
+    return render_template("disk.html", user=current_user, disks=session["disk_list"],
+                           render_data=generate_list_on_cluster_to_str(session["url"], session["port"],
+                                                                       '00000000-0000-0000-0000-0CC47AD453B0'))
+
 
 @display.route("/user", methods=["GET", "POST"])
 @login_required
@@ -81,11 +85,13 @@ def user():
     flash("user page reached")
     return render_template("user.html", user=current_user)
 
+
 @display.route("/volume", methods=["GET", "POST"])
 @login_required
 def volume():
     flash("volume page reached")
     return render_template("volume.html", user=current_user)
+
 
 @display.route("/manage", methods=["GET", "POST"])
 @login_required
