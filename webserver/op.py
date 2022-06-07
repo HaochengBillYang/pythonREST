@@ -1,7 +1,6 @@
 from pip import main
 from operation.Operation import *
 
-
 #
 # Deprecated Warning
 # This file was used for Compatibility
@@ -69,15 +68,18 @@ def generate_list(link, port):
     return main_list
 
 
-def generate_list_on_cluster(link, port, cluster_id) -> dict[str, (str, list[DiskInfo])]:
-    data = {}
+def generate_list_on_cluster(link, port, cluster_id) -> list[(str, str, list[dict[str, any]])]:
+    data = []
     server_host = link + ":" + str(port)
 
     for host in GetAllHostOperation(server_host).invoke(GetAllHostRequest(clusterId=cluster_id)).data:
-        data[host.hostId] = (host.hostName,  GetDisksByHostIdOperation(server_host).invoke(GetDisksByHostIdRequest(hostId=host.hostId)).data)
+        data.append((host.hostId, host.hostName,
+                             list(map(lambda x: x.dict(), GetDisksByHostIdOperation(server_host).invoke(
+                                 GetDisksByHostIdRequest(hostId=host.hostId)).data))
+                             )
+                    )
     return data
 
 
 def generate_list_on_cluster_to_str(link, port, cluster_id) -> str:
     return json.dumps(generate_list_on_cluster(link, port, cluster_id))
-

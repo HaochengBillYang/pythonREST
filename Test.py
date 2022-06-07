@@ -1,7 +1,7 @@
 import json
 from typing import TypeVar
 import urllib3
-
+#{%extends "base.html"%}
 from operation.cluster.GetAllClusters import GetAllClustersOperation, GetAllClustersRequest
 from operation.disk.GetDisksByHostId import GetDisksByHostIdOperation, GetDisksByHostIdRequest
 from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest

@@ -1,9 +1,10 @@
 {%extends "base.html"%}
-{%block head%}
-{{super()}}
-<head>
+{%block content%}
     <style>
-        @media screen and (min-width: 1201px) {
+    #disk-management{
+        font-family: monospace
+    }
+    @media screen and (min-width: 1201px) {
             #disk-list {
                 width: 70%;
                 max-width: 70%;
@@ -46,9 +47,7 @@
                 width: 90%;
             }
         }
-
     </style>
-
     <script>
         function register_checkbox_manager() {
             let host_checkbox = $(".host-checkbox")
@@ -107,13 +106,8 @@
             load_host_list()
             open_all_host()
         })
-
-        window.renderData = {{ }}
-
     </script>
-</head>
-{%endblock%}
-{%block content%}
+
 <div class="mdui-tab mdui-tab-full-width" mdui-tab>
     <a href="#disk-management" class="mdui-ripple">Disk</a>
     <a href="#volume-management" class="mdui-ripple">Volume</a>
@@ -129,7 +123,7 @@
             <li class="cluster">
                 <div class="mdui-collapse-item-header mdui-list-item">
                     <i class="mdui-icon material-icons">&#xe2c2;</i>
-                    <div class="mdui-list-item-content" style="margin-left: 5px">CLUSTER_ID_AAAA_AAAA_AAAA_AAA</div>
+                    <div class="mdui-list-item-content" style="margin-left: 5px">{{ cluster_id }}</div>
                     <i class="mdui-collapse-item-arrow mdui-icon material-icons" id="cluster-open-icon">keyboard_arrow_up</i>
                     <i class="mdui-collapse-item-arrow mdui-icon material-icons" id="cluster-close-icon">keyboard_arrow_down</i>
                     <label class="mdui-checkbox">
@@ -138,12 +132,13 @@
                     </label>
                 </div>
 
-                <ul class="mdui-list host-head" mdui-collapse="{}">
+                {%for i in range(render_data|length)%}
 
+                <ul class="mdui-list host-head" mdui-collapse="{}">
                     <li class="mdui-collapse-item">
                         <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                             <i class="mdui-icon material-icons">&#xe2c8;</i>
-                            <div class="mdui-list-item-content" style="margin-left: 5px">HOST_ID_AAAA_AAAA_AAAA_AAA
+                            <div class="mdui-list-item-content" style="margin-left: 5px">{{ render_data[i][0] + " (" + render_data[i][1]  + ") "}}
                             </div>
                             <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
                             <label class="mdui-checkbox">
@@ -152,99 +147,55 @@
                             </label>
                         </div>
                         <ul class="mdui-collapse-item-body mdui-list host">
+
+                            {% for k in range(render_data[i][2]|length) %}
                             <li class="mdui-list-item disk">
                                 <i class="mdui-icon material-icons">&#xe53b;</i>
                                 <div class="mdui-list-item-content" style="margin-left: 5px">
-                                    DISK_ID_AAAA_AAAA_AAAA_AAA
-                                    <span style="margin-left: 10px">
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Meta'}">&#xe54e;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Write Cache'}">&#xe3c9;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Read Cache'}">&#xe417;</i>
-                            </span>
+                                    {{  render_data[i][2][k]["diskId"] }}
+                                    <span style="margin-left: 10px;margin-right: 10px">
+                                        {% if 'DATA_DISK' in render_data[i][2][k]["diskTagList"] %}
+                                            <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>
+                                        {% else %}
+                                            <i class="mdui-icon material-icons" style="opacity: 0">&#xe1af;</i>
+                                        {% endif %}
+
+                                        {% if 'METADATA_DISK' in render_data[i][2][k]["diskTagList"] %}
+                                            <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Meta'}">&#xe54e;</i>
+                                        {% else %}
+                                            <i class="mdui-icon material-icons" style="opacity: 0">&#xe54e;</i>
+                                        {% endif %}
+
+                                        {% if 'WRITE_CACHE' in render_data[i][2][k]["diskTagList"] %}
+                                            <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Write Cache'}">&#xe3c9;</i>
+                                        {% else %}
+                                           <i class="mdui-icon material-icons" style="opacity: 0">&#xe3c9;</i>
+                                        {% endif %}
+
+                                        {% if 'READ_CACHE' in render_data[i][2][k]["diskTagList"]  %}
+                                             <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Read Cache'}">&#xe417;</i>
+                                        {% else %}
+                                             <i class="mdui-icon material-icons" style="opacity: 0">&#xe417;</i>
+                                        {% endif %}
+                                        <i mdui-tooltip="{content: 'Serial Number'}">{{ render_data[i][2][k]["diskSerialNumber"] }}</i>
+                                    </span>
                                 </div>
+                                <i mdui-tooltip="{content: 'State: {{ render_data[i][2][k]["state"] }}<br>Mount Point: {{ render_data[i][2][k]["mountPoint"] }}'}" class="mdui-icon material-icons">&#xe88e;</i>
+
                                 <label class="mdui-checkbox">
                                     <input type="checkbox" class="disk-checkbox"/>
                                     <i class="mdui-checkbox-icon"></i>
                                 </label>
                             </li>
 
-                            <li class="mdui-list-item disk">
-                                <i class="mdui-icon material-icons">&#xe53b;</i>
-                                <div class="mdui-list-item-content" style="margin-left: 5px">
-                                    DISK_ID_AAAA_AAAA_AAAA_AAA
-                                    <span style="margin-left: 10px">
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>
-                                <i class="mdui-icon material-icons" style="opacity: 0">&#xe54e;</i>
-                                <i class="mdui-icon material-icons" style="opacity: 0">&#xe3c9;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Read Cache'}">&#xe417;</i>
-                            </span>
-                                </div>
-                                <label class="mdui-checkbox">
-                                    <input type="checkbox" class="disk-checkbox"/>
-                                    <i class="mdui-checkbox-icon"></i>
-                                </label>
-                            </li>
-
+                            {% endfor %}
                         </ul>
                     </li>
 
 
                 </ul>
+                {% endfor %}
 
-                <ul class="mdui-list host-head" mdui-collapse="{}">
-
-                    <li class="mdui-collapse-item">
-                        <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
-                            <i class="mdui-icon material-icons">&#xe2c8;</i>
-                            <div class="mdui-list-item-content" style="margin-left: 5px">HOST_ID_AAAA_AAAA_AAAA_AAA
-                            </div>
-                            <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
-                            <label class="mdui-checkbox">
-                                <input type="checkbox" class="host-checkbox"/>
-                                <i class="mdui-checkbox-icon"></i>
-                            </label>
-                        </div>
-                        <ul class="mdui-collapse-item-body mdui-list host">
-                            <li class="mdui-list-item disk">
-                                <i class="mdui-icon material-icons">&#xe53b;</i>
-                                <div class="mdui-list-item-content" style="margin-left: 5px">
-                                    DISK_ID_AAAA_AAAA_AAAA_AAA
-                                    <span style="margin-left: 10px">
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Meta'}">&#xe54e;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Write Cache'}">&#xe3c9;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Read Cache'}">&#xe417;</i>
-                            </span>
-                                </div>
-                                <label class="mdui-checkbox">
-                                    <input type="checkbox" class="disk-checkbox"/>
-                                    <i class="mdui-checkbox-icon"></i>
-                                </label>
-                            </li>
-
-                            <li class="mdui-list-item disk">
-                                <i class="mdui-icon material-icons">&#xe53b;</i>
-                                <div class="mdui-list-item-content" style="margin-left: 5px">
-                                    DISK_ID_AAAA_AAAA_AAAA_AAA
-                                    <span style="margin-left: 10px">
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>
-                                <i class="mdui-icon material-icons" style="opacity: 0">&#xe54e;</i>
-                                <i class="mdui-icon material-icons" style="opacity: 0">&#xe3c9;</i>
-                                <i class="mdui-icon material-icons" mdui-tooltip="{content: 'Read Cache'}">&#xe417;</i>
-                            </span>
-                                </div>
-                                <label class="mdui-checkbox">
-                                    <input type="checkbox" class="disk-checkbox"/>
-                                    <i class="mdui-checkbox-icon"></i>
-                                </label>
-                            </li>
-
-                        </ul>
-                    </li>
-
-
-                </ul>
 
                 <div class="mdui-list host-head" mdui-collapse="{}">
 
@@ -343,4 +294,4 @@
 
 </div>
 
-</html>
+{%endblock%}

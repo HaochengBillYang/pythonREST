@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 import requests
 from flask_login import login_required, current_user
 from . import op
-from .op import generate_list_on_cluster_to_str
+from .op import generate_list_on_cluster_to_str, generate_list_on_cluster
 
 display = Blueprint("display", __name__)
 
@@ -75,9 +75,10 @@ def disk():
             flash("OK")
 
     return render_template("disk.html", user=current_user, disks=session["disk_list"],
-                           render_data=generate_list_on_cluster_to_str(session["url"], session["port"],
-                                                                       '00000000-0000-0000-0000-0CC47AD453B0'))
-
+                           cluster_id='d309fb6c-3115-4356-83d0-de23e9bc4071',
+                           render_data=generate_list_on_cluster(session["url"], session["port"],
+                                                                       'd309fb6c-3115-4356-83d0-de23e9bc4071'))
+                           # type: dict[str, (str, list[dict[str, any]])]
 
 @display.route("/user", methods=["GET", "POST"])
 @login_required
