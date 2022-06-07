@@ -1,8 +1,15 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for, session
+import os
+
+from flask import Blueprint, flash, redirect, render_template, request, url_for, session, jsonify, send_from_directory
 import requests
 from flask_login import login_required, current_user
+
 from . import op
 from .op import generate_list_on_cluster_to_str, generate_list_on_cluster, get_all_clusters
+import os
+
+STATIC_FOLDER = os.getcwd() + "/webserver/static"
+
 
 display = Blueprint("display", __name__)
 
@@ -77,8 +84,9 @@ def disk():
     return render_template("disk.html", user=current_user, disks=session["disk_list"],
                            cluster_id='d309fb6c-3115-4356-83d0-de23e9bc4071',
                            render_data=generate_list_on_cluster(session["url"], session["port"],
-                                                                       'd309fb6c-3115-4356-83d0-de23e9bc4071'))
-                           # type: dict[str, (str, list[dict[str, any]])]
+                                                                'd309fb6c-3115-4356-83d0-de23e9bc4071'))
+    # type: dict[str, (str, list[dict[str, any]])]
+
 
 @display.route("/user", methods=["GET", "POST"])
 @login_required
@@ -101,3 +109,35 @@ def manage():
     url = session["url"]
     session['cluster'] = get_all_clusters(url, port)
     return render_template("manage.html", user=current_user, cluster = session['cluster'])
+
+
+@display.route("/cluster", methods=["GET", "POST"])
+@login_required
+def cluster():
+    if request.method == "GET":
+        cluster_id = request.args.get('id', 'none', type=str)
+        if cluster_id == 'none':
+            return jsonify({"error": "id not found"})
+        return send_from_directory(STATIC_FOLDER, STATIC_FOLDER, 'cluster.html')
+
+
+def pack_failre(e: Exception):
+    return jsonify({"success": False, "reason": str(e)})
+
+
+def pack_success(e):
+    return jsonify({"success": True, "data": e})
+
+
+@display.route("/cluster/info", methods=["GET"])
+@login_required
+def cluster_info():
+    # d309fb6c-3115-4356-83d0-de23e9bc4071
+    if request.method == "GET":
+        cluster_id = request.args.get('id', 'none', type=str)
+        if cluster_id == 'none':
+            return jsonify({"error": "id not found"})
+        try:
+            return pack_success(generate_list_on_cluster(session["url"], session["port"], cluster_id))
+        except Exception as e:
+            return pack_failre(e)
