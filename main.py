@@ -6,5 +6,5 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
     
