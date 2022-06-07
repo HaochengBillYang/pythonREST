@@ -5,24 +5,35 @@ Home
 {% endblock %}
 
 {% block content %}
-<div style="width: 100%; text-align:center; margin-top:5%;">
-    <img src="{{url_for('static',filename='logo.svg')}}" width="15%" height="15%">
-<div/>
-
-<div style="text-align: left; margin-top:5%;">
-<form method="POST">
-    <div class="form-group">
-        <h1> Hello, {{user.username}} !</h1>
-        <label for="url">URL</label>
-        <input type="url" class="form-control" id="url" name="url" placeholder="https://172.16.4.248" />
+<div class="mdui-container" style="padding-top: 20%;">
+    <div class="mdui-shadow-2 mdui-typo" style="width: 70%; margin-left: 15%;padding: 10px; background-color: #2e1f00 ">
+        <div>
+            <div style="text-align: center">
+                <img src="{{url_for('static',filename='logo.svg')}}" style="height: 10vh; margin-top: 5%">
+                <h3>Input Address</h3>
+            </div>
+            <form method="post">
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">URL</label>
+                <input id="url" name="url" class="mdui-textfield-input" type="url" placeholder="https://172.16.4.248"/>
+            </div>
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">PORT</label>
+                <input id="port"  name="port" class="mdui-textfield-input" type="port" placeholder="8443"/>
+            </div>
+            <div class="mdui-row-xs-1">
+                <div class="mdui-col">
+                    <button id="login-button" type="submit" class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple">
+                        Start Managing
+                    </button>
+                </div>
+            </div>
+            </form>
+            <div style="width: 100%; margin-top: 10px">
+                <a class="dummy"></a>
+                <a style="float: right" href="/sign-up">Go Register</a>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="port">PORT</label>
-        <input type="port" class="form-control" id="port" name="port" placeholder="8443" />
-    </div>
-
-    <button type="submit" class="btn btn-block" style="background-color: #F0B90B; height:3.3vh;"><a>Manage Cluster</a></button>
-
-</form>
 </div>
 {% endblock %}
