@@ -72,7 +72,9 @@ def generate_list(link, port):
 def generate_list_on_cluster(link, port, cluster_id) -> dict[str, (str, list[DiskInfo])]:
     data = {}
     server_host = link + ":" + str(port)
+
     for host in GetAllHostOperation(server_host).invoke(GetAllHostRequest(clusterId=cluster_id)).data:
         data[host.hostId] = (host.hostName,  GetDisksByHostIdOperation(server_host).invoke(GetDisksByHostIdRequest(hostId=host.hostId)).data)
     return data
+
 
