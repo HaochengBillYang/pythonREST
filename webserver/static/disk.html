@@ -15,7 +15,7 @@
     <meta name=”viewport” content=”width=device-width, minimum-scale=1.0,user-scalable=yes”>
 
     <style>
-         @media screen and (min-width: 1201px) {
+        @media screen and (min-width: 1201px) {
             #disk-list {
                 width: 70%;
                 max-width: 70%;
@@ -26,11 +26,11 @@
                 max-width: 30%;
             }
 
-            #disk-management{
+            #disk-management {
                 display: flex;
             }
 
-            #disk-actions > .action{
+            #disk-actions > .action {
                 margin: 15px;
                 width: calc(100% - 30px);
             }
@@ -47,11 +47,11 @@
                 max-width: 100%;
             }
 
-            #disk-management{
+            #disk-management {
                 display: block;
             }
 
-            .action{
+            .action {
                 margin-bottom: 15px;
                 margin-top: 15px;
                 margin-left: 5%;
@@ -81,7 +81,7 @@
 
         let hosts = []
 
-        function load_host_list(){
+        function load_host_list() {
             let host_head = $(".host-head")
             host_head.each(function () {
                 hosts[hosts.length] = new mdui.Collapse($(this), {});
@@ -98,16 +98,16 @@
             })
         }
 
-        function open_all_host(){
-            for(let i = 0; i < hosts.length; ++i){
+        function open_all_host() {
+            for (let i = 0; i < hosts.length; ++i) {
                 hosts[i].openAll()
             }
             $("#cluster-open-icon").show()
             $("#cluster-close-icon").hide()
         }
 
-         function close_all_host(){
-            for(let i = 0; i < hosts.length; ++i){
+        function close_all_host() {
+            for (let i = 0; i < hosts.length; ++i) {
                 hosts[i].closeAll()
             }
             $("#cluster-close-icon").show()
@@ -119,6 +119,7 @@
             load_host_list()
             open_all_host()
         })
+
     </script>
 </head>
 <body class="mdui-theme-layout-dark mdui-theme-accent-orange mdui-theme-primary-orange">
@@ -294,23 +295,73 @@
         </ul>
     </div>
 
-    <div id="disk-actions" class="mdui-typo">
-        <blockquote>
-            <footer>
-                Actions on Selected Disks
+    <div id="disk-actions">
+        <div class="mdui-typo">
+            <blockquote>
+                <footer>
+                 Actions on Selected Disks
             </footer>
-        </blockquote>
-        <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action">Add Tags</button>
-        <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action">Remove Tags</button>
+            </blockquote>
+        </div>
 
-        <blockquote>
-            <footer>
-                Batch Testing
-            </footer>
-        </blockquote>
+        <ul class="mdui-menu" id="add-tag-menu">
+
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>DATA</a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe54e;</i>META</a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe3c9;</i>WRITE</a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
+            </li>
+            <li class="mdui-divider"></li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple">
+                    DATA + META
+                </a>
+            </li>
+        </ul>
+
+        <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action"
+                mdui-menu="{target: '#add-tag-menu'}">Add Tag
+        </button>
+
+
+        <ul class="mdui-menu" id="remove-tag-menu">
+
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe1af;</i>DATA</a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe54e;</i>META</a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe3c9;</i>WRITE</a>
+            </li>
+            <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon" mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
+            </li>
+        </ul>
+
+
+        <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action"  mdui-menu="{target: '#remove-tag-menu'}">Remove Tag</button>
+
+
+         <div class="mdui-typo">
+            <blockquote>
+                <footer>
+                 Batch Testing
+                </footer>
+            </blockquote>
+        </div>
+
+
         <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action">Load From Template</button>
         <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple action">Save To Template</button>
-
     </div>
 
 
