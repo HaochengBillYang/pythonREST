@@ -11,7 +11,7 @@ from operation.task.TraceTask import TraceTaskOperation, TraceTaskRequest
 from operation.task.TraceUntilComplete import TraceUntilCompleteOperation, TraceUntilCompleteRequest
 from operation.volume.CreateVolume import CreateVolumeOperation, CreateVolumeRequest
 from operation.volume.DeleteVolume import DeleteVolumeOperation, DeleteVolumeRequest
-from webserver.op import generate_list_on_cluster
+from webserver.op import generate_list_on_cluster, generate_list_on_cluster_to_str
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -24,4 +24,4 @@ op1 = GetAllClustersOperation(
 ))
 
 
-print(generate_list_on_cluster("https://172.16.4.248","8443","d309fb6c-3115-4356-83d0-de23e9bc4071"))
+print(generate_list_on_cluster_to_str("https://172.16.4.248","8443","d309fb6c-3115-4356-83d0-de23e9bc4071"))
