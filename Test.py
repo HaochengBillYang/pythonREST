@@ -21,26 +21,3 @@ op1 = GetAllClustersOperation(
 ).invoke(GetAllClustersRequest(
 
 ))
-
-op2 = CreateVolumeOperation(
-    host="https://172.16.4.248:8443"
-).invoke(CreateVolumeRequest(
-    clusterId=op1.data[0].clusterId,
-    volumeName="test",
-    volumeSize=1073741824,
-))
-
-op3 = DeleteVolumeOperation(
-    host="https://172.16.4.248:8443"
-).invoke(DeleteVolumeRequest(
-    clusterId=op1.data[0].clusterId,
-    byName=True,
-    volumeIdOrNameList=["test"],
-    force=False
-))
-
-op4 = TraceUntilCompleteOperation(
-    host="https://172.16.4.248:8443"
-).invoke(TraceUntilCompleteRequest(
-    taskId=op3.taskId
-))
