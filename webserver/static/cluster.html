@@ -85,7 +85,6 @@
                 subs.prop("checked", new_value)
             })
         }
-
         let hosts = []
 
         function load_host_list() {
@@ -150,6 +149,49 @@
             vm = app.mount('#disk-management')
         }
 
+        function start_loading(){
+            $("#loading").show()
+        }
+
+        function end_loading(){
+             $("#loading").hide()
+        }
+
+
+        function custom_ajax(path, method, data, receiver){
+            start_loading()
+
+            let x = new XMLHttpRequest();
+
+            x.open(method, path, true)
+            x.setRequestHeader('content-type', 'application/json; charset=utf-8');
+            x.setRequestHeader('request-by', 'front-end-v01');
+            x.send(JSON.stringify(data))
+
+
+            x.onreadystatechange = function () {
+            if (x.readyState === 4) {
+                end_loading()
+                try{
+                    let res = JSON.parse(x.responseText);
+                    if(res.success && res.success === true){
+                         receiver(res.data)
+                    }
+                }catch (e) {
+
+                }
+            }
+
+
+        }
+
+            end_loading()
+        }
+
+
+        function update_data(){
+
+        }
 
         $(window).ready(function () {
             vue_render()
@@ -226,6 +268,11 @@
     </li>
 </template>
 <body class="mdui-theme-layout-dark mdui-theme-accent-orange mdui-theme-primary-orange">
+
+<div id="loading"
+     style="z-index: 999999;width: 100vw;height: 100vh;position: absolute;background: #141414; opacity: 0.6;line-height: 100vh;text-align: center">
+    <div class="mdui-spinner"></div>
+</div>
 
 <div class="mdui-toolbar mdui-color-theme">
     <span style="height: 100%">

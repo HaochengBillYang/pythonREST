@@ -118,6 +118,14 @@ def cluster():
         return send_from_directory(STATIC_FOLDER, STATIC_FOLDER, 'cluster.html')
 
 
+def pack_failre(e: Exception):
+    return jsonify({"success": False, "reason": str(e)})
+
+
+def pack_success(e):
+    return jsonify({"success": True, "data": e})
+
+
 @display.route("/cluster/info", methods=["GET"])
 @login_required
 def cluster_info():
@@ -126,4 +134,7 @@ def cluster_info():
         cluster_id = request.args.get('id', 'none', type=str)
         if cluster_id == 'none':
             return jsonify({"error": "id not found"})
-        return jsonify(generate_list_on_cluster(session["url"], session["port"], cluster_id))
+        try:
+            return pack_success(generate_list_on_cluster(session["url"], session["port"], cluster_id))
+        except Exception as e:
+            return pack_failre(e)
