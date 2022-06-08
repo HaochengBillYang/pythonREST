@@ -29,11 +29,3 @@ op2 = GetAllHostOperation(
     host="https://172.16.4.248:8443"
 ).invoke(GetAllHostRequest())
 
-for host in GetAllHostOperation("https://172.16.4.248:8443").invoke(GetAllHostRequest(clusterId=op1.data[0].clusterId)).data:
-    if"53 " not in host.hostName :
-        HostJoinClusterOperation("https://172.16.4.248:8443").invoke(
-            HostJoinClusterRequest(
-                clusterId=op1.data[0].clusterId,
-                hosts=[host.hostId]
-            )
-        )

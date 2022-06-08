@@ -1,14 +1,35 @@
-{%extends "base.html"%}
-{%block content%}
-<div>
-    {%for item in cluster%}
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" 
-    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "{{'location.href='+'\'/cluster?id='+item+'\''}}">Cluster: {{item}}</button>
-    {%endfor%}
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" 
-    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href= '/create';">Create Cluster</button>
-    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" 
-    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href= '/logs';">Advanced</button>
-</div>
+{% extends "base.html" %}
+{% block content %}
 
-{%endblock%}
+    <div class="mdui-dialog" id="createCluster">
+        <div class="mdui-dialog-content">
+            <div class="mdui-dialog-title">Use Google's location service?</div>
+            Let Google help apps determine location. This means sending anonymous location data to Google, even when no
+            apps are running.
+            <br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple">no thanks</button>
+            <button class="mdui-btn mdui-ripple">turn on speeboost</button>
+        </div>
+    </div>
+
+
+
+    <div>
+        {% for item in cluster %}
+            <button type="button" style="height: 64px; margin-top: 1%; font-size:large;"
+                    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple"
+                    onclick="{{ 'location.href='+'\'/cluster?id='+item+'\'' }}">Cluster: {{ item }}</button>
+        {% endfor %}
+
+        <button type="button" style="height: 64px; margin-top: 1%; font-size:large;"
+                class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple"
+                mdui-dialog="{target: '#createCluster'}">
+
+            Create Cluster
+        </button>
+    </div>
+
+
+{% endblock %}

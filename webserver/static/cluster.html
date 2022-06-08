@@ -249,7 +249,7 @@
                 }
                 custom_ajax("/cluster/disk/remove-tag","POST",{
                     "clusterId": clusterId,
-                    "tag": tags,
+                    "tags": tags,
                     "disks": disks
                 },function () {
                     update_data()
