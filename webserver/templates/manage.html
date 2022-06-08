@@ -3,8 +3,10 @@
 <div>
     {%for item in cluster%}
     <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" 
-    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "{{'location.href:'+'\'/cluster?id='+item+';\''}}">Cluster: {{item}}</button>
+    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "{{'location.href='+'\'/cluster?id='+item+'\''}}">Cluster: {{item}}</button>
     {%endfor%}
+    <button type="button" style="height: 64px; margin-top: 1%; font-size:large;" 
+    class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple" onclick = "location.href= '/logs';">Advanced</button>
 </div>
 
 
