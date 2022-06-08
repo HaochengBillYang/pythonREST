@@ -110,7 +110,7 @@ class RestRequest(Request):
         self._before_request()
         resp = None
         if self.method == Method.GET:
-            resp = req.get(url=self.url, data=self.data, headers=self.headers, verify=False)
+            resp = req.get(url=self.url, params=self.data, headers=self.headers, verify=False)
         elif self.method == Method.POST:
             resp = req.post(url=self.url, json=self.data, headers=self.headers, verify=False)
         elif self.method == Method.PUT:
