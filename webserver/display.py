@@ -248,7 +248,6 @@ def remove_tag_request():
         if fail == False:
             for item in request.json['disks']:
                 for tag in tags:
-
                     RemoveDiskTagByIdOperation(
                         host=(session['url'] + ':' + str(session['port']))
                         ).invoke(RemoveDiskTagByIdRequest(
