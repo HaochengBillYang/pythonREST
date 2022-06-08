@@ -180,15 +180,45 @@ def host_info():
 @display.route("cluster/disk/add-tag", methods=["POST"])
 @login_required
 def add_tag_request():
-    print("The request is ")
-    print(request.json)
-
-
-   # {'clusterId': 'd309fb6c-3115-4356-83d0-de23e9bc4071', 'tags': ['DATA_DISK'], 'disks': [
+    fail = False
+    failure_message = []
+    tags = request.json['tags']
+    for item in request.json['disks']:
+        existing_tags = item['diskTags']
+        tmp_all = tags + existing_tags
+        all_tags = []; [all_tags.append(item)  for item in tmp_all if item not in all_tags]
+        a = 'DATA_DISK'
+        b = 'METADATA_DISK'
+        c = 'WRITE_CACHE'
+        d = 'READ_CACHE'
+        A = a in all_tags
+        B = b in all_tags
+        C = c in all_tags
+        D = d in all_tags
+        if not (not C and not D or not A and not B and not C or not A and not B and not C):
+            fail = True
+            failure_message.append(str(item['diskId'])+ ' cannot be given tag: ' + str(tags) + '</br>')
+    if fail:
+        return pack_failure(''.join(failure_message))
+    try:
+        if fail == False:
+            for item in request.json['disks']:
+                for tag in tags:
+                    GiveDiskTagByIdOperation(
+                        host=(session['url'] + ':' + str(session['port']))
+                        ).invoke(GiveDiskTagByIdRequest(
+                        diskIds=[item['diskId']],
+                        hostId=item['hostId'],
+                        diskTag=tag
+                    ))
+                return pack_success("0 errors, 0 warnings")
+    except Exception as e:
+        return pack_exception(e)
+    #    {'clusterId': 'd309fb6c-3115-4356-83d0-de23e9bc4071', 'tags': ['DATA_DISK'], 'disks': [
     #    {'diskId': '121cbcce-0784-4a6f-b556-41ea35ac218d', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
-    ##     'diskTags': ['METADATA_DISK', 'DATA_DISK']},
+    #    'diskTags': ['METADATA_DISK', 'DATA_DISK']},
     #    {'diskId': 'a0a96f62-60c8-4fd6-a684-50d246918b04', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
-     #    'diskTags': ['METADATA_DISK', 'DATA_DISK']}]}
+    #    'diskTags': ['METADATA_DISK', 'DATA_DISK']}]}
 
 
 
