@@ -1,13 +1,17 @@
 import os
 
+import pydantic
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session, jsonify, send_from_directory
 import requests
 from flask_login import login_required, current_user
+from pydantic import BaseModel
 
 from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
+from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
 from . import op
 from .op import generate_list_on_cluster_to_str, generate_list_on_cluster, get_all_clusters
 import os
+from fastapi.encoders import jsonable_encoder
 
 STATIC_FOLDER = os.getcwd() + "/webserver/static"
 
@@ -128,8 +132,10 @@ def pack_exception(e: Exception):
 def pack_failure(e: Exception):
     return jsonify({"success": False, "reason": e})
 
+
 def pack_success(e):
-    return jsonify({"success": True, "data": e})
+    return jsonable_encoder({"success": True, "data": e})
+
 
 
 @display.route("/cluster/info", methods=["GET"])
@@ -142,6 +148,27 @@ def cluster_info():
         return pack_success(generate_list_on_cluster(session["url"], session["port"], cluster_id))
     except Exception as e:
         return pack_exception(e)
+
+
+@display.route("/cluster/host", methods=["GET"])
+@login_required
+def host_info():
+    cluster_id = request.args.get('id', 'none', type=str)
+    free = request.args.get('free', False, type=bool)
+    if cluster_id == 'none':
+        return jsonify({"error": "id not found"})
+    try:
+        server_host = session["url"] + ":" + str(session["port"])
+
+        return pack_success(
+            GetAllHostOperation(server_host).invoke(GetAllHostRequest(
+                clusterId=cluster_id,
+                onlyFreeHost=free
+            )).data
+        )
+    except Exception as e:
+        return pack_exception(e)
+
 
 
 @display.route("cluster/disk/add-tag", methods=["POST"])
@@ -188,3 +215,4 @@ def remove_tag_request():
         return pack_success("")
     except Exception as e:
         return pack_exception(e)
+
