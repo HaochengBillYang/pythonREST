@@ -17,10 +17,12 @@ STATIC_FOLDER = os.getcwd() + "/webserver/static"
 display = Blueprint("display", __name__)
 
 import traceback
+
+
 def exception_to_string(excp):
-   stack = traceback.extract_stack()[:-3] + traceback.extract_tb(excp.__traceback__)  # add limit=??
-   pretty = traceback.format_list(stack)
-   return '{} <br> {} '.format(excp.__class__,excp) + '<br>'.join(pretty) + '<br>'
+    stack = traceback.extract_stack()[:-3] + traceback.extract_tb(excp.__traceback__)  # add limit=??
+    pretty = traceback.format_list(stack)
+    return '{} <br> {} '.format(excp.__class__, excp) + '<br>'.join(pretty) + '<br>'
 
 
 @display.route("/", methods=["GET", "POST"])  # Say what method is allowed here
@@ -142,7 +144,6 @@ def pack_success(e):
     return jsonable_encoder({"success": True, "data": e})
 
 
-
 @display.route("/cluster/info", methods=["GET"])
 @login_required
 def cluster_info():
@@ -176,7 +177,6 @@ def host_info():
         return pack_exception(e)
 
 
-
 @display.route("cluster/disk/add-tag", methods=["POST"])
 @login_required
 def add_tag_request():
@@ -186,7 +186,8 @@ def add_tag_request():
     for item in request.json['disks']:
         existing_tags = item['diskTags']
         tmp_all = tags + existing_tags
-        all_tags = []; [all_tags.append(item)  for item in tmp_all if item not in all_tags]
+        all_tags = [];
+        [all_tags.append(item) for item in tmp_all if item not in all_tags]
         a = 'DATA_DISK'
         b = 'METADATA_DISK'
         c = 'WRITE_CACHE'
@@ -197,7 +198,7 @@ def add_tag_request():
         D = d in all_tags
         if not (not C and not D or not A and not B and not C or not A and not B and not C):
             fail = True
-            failure_message.append(str(item['diskId'])+ ' cannot be given tag: ' + str(tags) + '</br>')
+            failure_message.append(str(item['diskId']) + ' cannot be given tag: ' + str(tags) + '</br>')
     if fail:
         return pack_failure(''.join(failure_message))
     try:
@@ -206,7 +207,7 @@ def add_tag_request():
                 for tag in tags:
                     GiveDiskTagByIdOperation(
                         host=(session['url'] + ':' + str(session['port']))
-                        ).invoke(GiveDiskTagByIdRequest(
+                    ).invoke(GiveDiskTagByIdRequest(
                         diskIds=[item['diskId']],
                         hostId=item['hostId'],
                         diskTag=tag
@@ -225,48 +226,48 @@ def add_tag_request():
 @display.route("cluster/disk/remove-tag", methods=["POST"])
 @login_required
 def remove_tag_request():
-# {'clusterId': 'd309fb6c-3115-4356-83d0-de23e9bc4071', 'tags': ['DATA_DISK'], 'disks': [
-#    {'diskId': '121cbcce-0784-4a6f-b556-41ea35ac218d', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
-##     'diskTags': ['METADATA_DISK', 'DATA_DISK']},
-#    {'diskId': 'a0a96f62-60c8-4fd6-a684-50d246918b04', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
-#    'diskTags': ['METADATA_DISK', 'DATA_DISK']}]}
+    # {'clusterId': 'd309fb6c-3115-4356-83d0-de23e9bc4071', 'tags': ['DATA_DISK'], 'disks': [
+    #    {'diskId': '121cbcce-0784-4a6f-b556-41ea35ac218d', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
+    ##     'diskTags': ['METADATA_DISK', 'DATA_DISK']},
+    #    {'diskId': 'a0a96f62-60c8-4fd6-a684-50d246918b04', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
+    #    'diskTags': ['METADATA_DISK', 'DATA_DISK']}]}
     fail = False
-        failure_message = []
-        tags = request.json['tags']
-        for item in request.json['disks']:
-            existing_tags = item['diskTags']
-            tmp_all = tags + existing_tags
-            all_tags = []; [all_tags.append(item)  for item in tmp_all if item not in all_tags]
-            a = 'DATA_DISK'
-            b = 'METADATA_DISK'
-            c = 'WRITE_CACHE'
-            d = 'READ_CACHE'
-            A = a in all_tags
-            B = b in all_tags
-            C = c in all_tags
-            D = d in all_tags
-            if not (not C and not D or not A and not B and not C or not A and not B and not C):
-                fail = True
-                failure_message.append(str(item['diskId'])+ ' cannot be given tag: ' + str(tags) + '</br>')
-        if fail:
-            return pack_failure(''.join(failure_message))
-        try:
-            if fail == False:
-                for item in request.json['disks']:
-                    for tag in tags:
-                        GiveDiskTagByIdOperation(
-                            host=(session['url'] + ':' + str(session['port']))
-                            ).invoke(GiveDiskTagByIdRequest(
-                            diskIds=[item['diskId']],
-                            hostId=item['hostId'],
-                            diskTag=tag
-                        ))
-                        # return a key task success?
-                    return pack_success("0 errors, 0 warnings")
-        except Exception as e:
-            return pack_exception(e)
-        try:
-            return pack_success("")
-        except Exception as e:
-            return pack_exception(e)
-
+    failure_message = []
+    tags = request.json['tags']
+    for item in request.json['disks']:
+        existing_tags = item['diskTags']
+        tmp_all = tags + existing_tags
+        all_tags = [];
+        [all_tags.append(item) for item in tmp_all if item not in all_tags]
+        a = 'DATA_DISK'
+        b = 'METADATA_DISK'
+        c = 'WRITE_CACHE'
+        d = 'READ_CACHE'
+        A = a in all_tags
+        B = b in all_tags
+        C = c in all_tags
+        D = d in all_tags
+        if not (not C and not D or not A and not B and not C or not A and not B and not C):
+            fail = True
+            failure_message.append(str(item['diskId']) + ' cannot be given tag: ' + str(tags) + '</br>')
+    if fail:
+        return pack_failure(''.join(failure_message))
+    try:
+        if fail == False:
+            for item in request.json['disks']:
+                for tag in tags:
+                    GiveDiskTagByIdOperation(
+                        host=(session['url'] + ':' + str(session['port']))
+                    ).invoke(GiveDiskTagByIdRequest(
+                        diskIds=[item['diskId']],
+                        hostId=item['hostId'],
+                        diskTag=tag
+                    ))
+                    # return a key task success?
+                return pack_success("0 errors, 0 warnings")
+    except Exception as e:
+        return pack_exception(e)
+    try:
+        return pack_success("")
+    except Exception as e:
+        return pack_exception(e)
