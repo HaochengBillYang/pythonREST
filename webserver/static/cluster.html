@@ -291,8 +291,6 @@
             update_data()
             disk_actions()
         })
-
-
     </script>
 
 </head>
@@ -348,10 +346,9 @@
                                    class="mdui-icon material-icons"
                                    style="opacity: 0">&#xe417;</i>
                             </span>
-
             <i mdui-tooltip="{content: 'Serial Number'}">{{ disk_info.diskSerialNumber }}</i>
         </div>
-        <i v-bind:mdui-tooltip="'{content: \'state: ' + disk_info.state + '<br> mount:' + disk_info.mountPoint +'\'}'"
+        <i v-bind:mdui-tooltip="'{content: \'state: ' + disk_info.state + '<br> name:'  + disk_info.deviceNodeName + '<br> mount:' + disk_info.mountPoint +'\'}'"
            class="mdui-icon material-icons">&#xe88e;</i>
 
         <label class="mdui-checkbox">
@@ -366,6 +363,20 @@
      style="z-index: 999999;width: 100vw;height: 100vh;position: absolute;background: #141414; opacity: 0.6;line-height: 100vh;text-align: center">
     <div class="mdui-spinner"></div>
 </div>
+
+<div class="mdui-dialog">
+    <div class="mdui-dialog-content">
+      <div class="mdui-dialog-title">Use Google's location service?</div>
+      Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+      <br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test
+    </div>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple">no thanks</button>
+      <button class="mdui-btn mdui-ripple">turn on speeboost</button>
+    </div>
+  </div>
+
+
 
 <div class="mdui-toolbar mdui-color-theme">
     <span style="height: 100%">

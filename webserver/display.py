@@ -1,5 +1,4 @@
 import os
-
 import pydantic
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session, jsonify, send_from_directory
 import requests
@@ -16,6 +15,12 @@ from fastapi.encoders import jsonable_encoder
 STATIC_FOLDER = os.getcwd() + "/webserver/static"
 
 display = Blueprint("display", __name__)
+
+import traceback
+def exception_to_string(excp):
+   stack = traceback.extract_stack()[:-3] + traceback.extract_tb(excp.__traceback__)  # add limit=??
+   pretty = traceback.format_list(stack)
+   return '{} <br> {} '.format(excp.__class__,excp) + '<br>'.join(pretty) + '<br>'
 
 
 @display.route("/", methods=["GET", "POST"])  # Say what method is allowed here
@@ -126,7 +131,7 @@ def cluster():
 
 
 def pack_exception(e: Exception):
-    return jsonify({"success": False, "reason": str(e)})
+    return jsonify({"success": False, "reason": exception_to_string(e)})
 
 
 def pack_failure(e: Exception):
@@ -167,6 +172,7 @@ def host_info():
             )).data
         )
     except Exception as e:
+        e
         return pack_exception(e)
 
 

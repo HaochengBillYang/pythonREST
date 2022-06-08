@@ -19,5 +19,6 @@ class DiskInfo(BaseModel):
     mountPoint: str
     hostId: str
     state: str
+    deviceNodeName: str
     diskTagList: list[str]
     diskSerialNumber: str
