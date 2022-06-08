@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from operation.Operation import Operation
 from request.Request import RestRequest, Method
 from request.pipelines.KeyExchange import KeyExchangePipeline
+from utils.Structs import HostInfo
 
 
 class GetAllHostRequest(BaseModel):
@@ -13,11 +14,6 @@ class GetAllHostRequest(BaseModel):
     clusterId: Optional[str]
     pass
 
-
-class HostInfo(BaseModel):
-    hostId: str
-    hostName: str
-    state: str
 
 
 class GetAllHostResponse(BaseModel):

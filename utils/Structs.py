@@ -22,3 +22,11 @@ class DiskInfo(BaseModel):
     deviceNodeName: str
     diskTagList: list[str]
     diskSerialNumber: str
+
+class HostInfo(BaseModel):
+    hostId: str
+    hostName: str
+    state: str
+    clusterId: Optional[str]
+    state: str
+    allowedToLeaveCluster: bool

@@ -2,11 +2,13 @@ import json
 from typing import TypeVar
 import urllib3
 #{%extends "base.html"%}
+from operation.cluster.CreateCluster import CreateClusterOperation, CreateClusterRequest, CreateClusterInfo
 from operation.cluster.GetAllClusters import GetAllClustersOperation, GetAllClustersRequest
 from operation.disk.GetDisksByHostId import GetDisksByHostIdOperation, GetDisksByHostIdRequest
 from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
 from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdOperation, RemoveDiskTagByIdRequest
 from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
+from operation.host.HostJoinCluster import HostJoinClusterOperation, HostJoinClusterRequest
 from operation.task.TraceTask import TraceTaskOperation, TraceTaskRequest
 from operation.task.TraceUntilComplete import TraceUntilCompleteOperation, TraceUntilCompleteRequest
 from operation.volume.CreateVolume import CreateVolumeOperation, CreateVolumeRequest
@@ -23,5 +25,15 @@ op1 = GetAllClustersOperation(
 
 ))
 
+op2 = GetAllHostOperation(
+    host="https://172.16.4.248:8443"
+).invoke(GetAllHostRequest())
 
-print(generate_list_on_cluster_to_str("https://172.16.4.248","8443","d309fb6c-3115-4356-83d0-de23e9bc4071"))
+for host in GetAllHostOperation("https://172.16.4.248:8443").invoke(GetAllHostRequest(clusterId=op1.data[0].clusterId)).data:
+    if"53 " not in host.hostName :
+        HostJoinClusterOperation("https://172.16.4.248:8443").invoke(
+            HostJoinClusterRequest(
+                clusterId=op1.data[0].clusterId,
+                hosts=[host.hostId]
+            )
+        )
