@@ -2,12 +2,34 @@
 {% block content %}
 
     <div class="mdui-dialog" id="createCluster">
+
+    <form>
         <div class="mdui-dialog-content">
-            <div class="mdui-dialog-title">Use Google's location service?</div>
-            Let Google help apps determine location. This means sending anonymous location data to Google, even when no
-            apps are running.
-            <br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test<br/>test
+            <div class="mdui-dialog-title">Create New Cluster</div>
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">Cluster Name</label>
+                <input class="mdui-textfield-input" type="text"/>
+            </div>
+
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">Min Cluster Size</label>
+                <input class="mdui-textfield-input" type="number"/>
+            </div>
+
+
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">Replication Factor</label>
+                <input class="mdui-textfield-input" type="number"/>
+            </div>
+
+
+            <div class="mdui-textfield">
+                <label class="mdui-textfield-label">Virtual Ip</label>
+                <input class="mdui-textfield-input" type="text"/>
+            </div>
         </div>
+    </form>
+
         <div class="mdui-dialog-actions">
             <button class="mdui-btn mdui-ripple">no thanks</button>
             <button class="mdui-btn mdui-ripple">turn on speeboost</button>
