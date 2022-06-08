@@ -4,6 +4,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 import requests
 from flask_login import login_required, current_user
 
+from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
 from . import op
 from .op import generate_list_on_cluster_to_str, generate_list_on_cluster, get_all_clusters
 import os
@@ -120,9 +121,12 @@ def cluster():
         return send_from_directory(STATIC_FOLDER, STATIC_FOLDER, 'cluster.html')
 
 
-def pack_failre(e: Exception):
+def pack_exception(e: Exception):
     return jsonify({"success": False, "reason": str(e)})
 
+
+def pack_failure(e: Exception):
+    return jsonify({"success": False, "reason": e})
 
 def pack_success(e):
     return jsonify({"success": True, "data": e})
@@ -137,17 +141,37 @@ def cluster_info():
     try:
         return pack_success(generate_list_on_cluster(session["url"], session["port"], cluster_id))
     except Exception as e:
-        return pack_failre(e)
+        return pack_exception(e)
 
 
-@display.route("/cluster/info", methods=["POST"])
+@display.route("cluster/disk/add-tag", methods=["POST"])
 @login_required
 def add_tag_request():
-    print("The request is " + request.json)
+    print("The request is ")
+    print(request.json)
+
+
+   # {'clusterId': 'd309fb6c-3115-4356-83d0-de23e9bc4071', 'tags': ['DATA_DISK'], 'disks': [
+    #    {'diskId': '121cbcce-0784-4a6f-b556-41ea35ac218d', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
+    ##     'diskTags': ['METADATA_DISK', 'DATA_DISK']},
+    #    {'diskId': 'a0a96f62-60c8-4fd6-a684-50d246918b04', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
+     #    'diskTags': ['METADATA_DISK', 'DATA_DISK']}]}
+
+
 
     try:
         # TODO
+
+       # GiveDiskTagByIdOperation(
+        #    host=""
+        #).invoke(GiveDiskTagByIdRequest(
+        #    diskIds=[id],
+        #    hostId=id,
+        #    diskTag=tag
+        #))
+
+        #return pack_failure("Disk xxxxxx 不能加xxxx tag")
         return pack_success("")
     except Exception as e:
-        return pack_failre(e)
+        return pack_exception(e)
 
