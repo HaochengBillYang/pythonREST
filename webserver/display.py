@@ -175,3 +175,16 @@ def add_tag_request():
     except Exception as e:
         return pack_exception(e)
 
+
+@display.route("cluster/disk/remove-tag", methods=["POST"])
+@login_required
+def remove_tag_request():
+# {'clusterId': 'd309fb6c-3115-4356-83d0-de23e9bc4071', 'tags': ['DATA_DISK'], 'disks': [
+#    {'diskId': '121cbcce-0784-4a6f-b556-41ea35ac218d', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
+##     'diskTags': ['METADATA_DISK', 'DATA_DISK']},
+#    {'diskId': 'a0a96f62-60c8-4fd6-a684-50d246918b04', 'hostId': '00000000-0000-0000-0000-0CC47AD453B0',
+#    'diskTags': ['METADATA_DISK', 'DATA_DISK']}]}
+    try:
+        return pack_success("")
+    except Exception as e:
+        return pack_exception(e)

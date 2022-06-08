@@ -239,12 +239,33 @@
                 })
             }
 
+            function remove_tag_request(tags){
+                let disks = all_selected_disk()
+                if(disks.length === 0){
+                    mdui.dialog({
+                        title: 'No Disk Selected',
+                    });
+                    return
+                }
+                custom_ajax("/cluster/disk/remove-tag","POST",{
+                    "clusterId": clusterId,
+                    "tag": tags,
+                    "disks": disks
+                },function () {
+                    update_data()
+                })
+            }
+
             $(".add_tag").click(function () {
                 add_tag_request([$(this).attr("tag")])
             })
 
             $("#add_tag_data_meta").click(function () {
                 add_tag_request(["DATA_DISK","METADATA_DISK"])
+            })
+
+            $(".remove-tag").click(function () {
+                remove_tag_request([$(this).attr("tag")])
             })
         }
 
@@ -466,21 +487,21 @@
         </button>
 
         <ul class="mdui-menu" id="remove-tag-menu">
-            <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+            <li class="mdui-menu-item remove-tag" tag="DATA_DISK">
+                <a class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
                                                               mdui-tooltip="{content: 'Data'}">&#xe1af;</i>DATA</a>
             </li>
-            <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+            <li class="mdui-menu-item remove-tag" tag="METADATA_DISK">
+                <a class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
                                                               mdui-tooltip="{content: 'Data'}">&#xe54e;</i>META</a>
             </li>
-            <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+            <li class="mdui-menu-item remove-tag"  tag="WRITE_CACHE">
+                <a class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
                                                               mdui-tooltip="{content: 'Data'}">&#xe3c9;</i>WRITE</a>
             </li>
-            <li class="mdui-menu-item">
-                <a href="javascript:;" class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
-                                                              mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
+            <li class="mdui-menu-item remove-tag" tag="READ_CACHE">
+                <a class="mdui-ripple"><i class="mdui-icon material-icons mdui-menu-item-icon"
+                                          mdui-tooltip="{content: 'Data'}">&#xe417;</i>READ</a>
             </li>
         </ul>
 
