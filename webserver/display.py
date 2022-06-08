@@ -10,7 +10,6 @@ import os
 
 STATIC_FOLDER = os.getcwd() + "/webserver/static"
 
-
 display = Blueprint("display", __name__)
 
 
@@ -108,7 +107,7 @@ def manage():
     port = session["port"]
     url = session["url"]
     session['cluster'] = get_all_clusters(url, port)
-    return render_template("manage.html", user=current_user, cluster = session['cluster'])
+    return render_template("manage.html", user=current_user, cluster=session['cluster'])
 
 
 @display.route("/cluster", methods=["GET", "POST"])
@@ -132,12 +131,23 @@ def pack_success(e):
 @display.route("/cluster/info", methods=["GET"])
 @login_required
 def cluster_info():
-    # d309fb6c-3115-4356-83d0-de23e9bc4071
-    if request.method == "GET":
-        cluster_id = request.args.get('id', 'none', type=str)
-        if cluster_id == 'none':
-            return jsonify({"error": "id not found"})
-        try:
-            return pack_success(generate_list_on_cluster(session["url"], session["port"], cluster_id))
-        except Exception as e:
-            return pack_failre(e)
+    cluster_id = request.args.get('id', 'none', type=str)
+    if cluster_id == 'none':
+        return jsonify({"error": "id not found"})
+    try:
+        return pack_success(generate_list_on_cluster(session["url"], session["port"], cluster_id))
+    except Exception as e:
+        return pack_failre(e)
+
+
+@display.route("/cluster/info", methods=["POST"])
+@login_required
+def add_tag_request():
+    print("The request is " + request.json)
+
+    try:
+        # TODO
+        return pack_success("")
+    except Exception as e:
+        return pack_failre(e)
+
