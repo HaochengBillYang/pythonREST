@@ -2,6 +2,8 @@ import json
 from typing import TypeVar
 import urllib3
 #{%extends "base.html"%}
+from config.Config import ConnectionConfig, HostConfig
+from config.ConfigManagement import save_config, retrieve_config_by_type, remove_config_by_id
 from operation.cluster.CreateCluster import CreateClusterOperation, CreateClusterRequest, CreateClusterInfo
 from operation.cluster.GetAllClusters import GetAllClustersOperation, GetAllClustersRequest
 from operation.disk.GetDisksByHostId import GetDisksByHostIdOperation, GetDisksByHostIdRequest
@@ -19,13 +21,4 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from operation.Operation import *
 
-op1 = GetAllClustersOperation(
-    host="https://172.16.4.248:8443"
-).invoke(GetAllClustersRequest(
-
-))
-
-op2 = GetAllHostOperation(
-    host="https://172.16.4.248:8443"
-).invoke(GetAllHostRequest())
 
