@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
 from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
 from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdOperation,  RemoveDiskTagByIdRequest
+from operation.cluster.CreateCluster import CreateClusterInfo, CreateClusterOperation, CreateClusterRequest
 from . import op
 from .op import generate_list_on_cluster_to_str, generate_list_on_cluster, get_all_clusters
 import os
@@ -119,6 +120,23 @@ def volume():
 def manage():
     port = session["port"]
     url = session["url"]
+    if request.method == "POST":
+        name = request.form.get("name")
+        minsize = request.form.get("size")
+        copy = request.form.get("copy")
+        ip = request.form.get("ip")
+        CreateClusterOperation(
+            host=url+":"+port
+        ).invoke(CreateClusterRequest(
+            cluster = CreateClusterInfo(
+                clusterName = name,
+                minClusterSize = minsize,
+                replicationFactor = copy,
+                virtualIp = ip
+            ),
+            hosts=[]
+        ))
+
     session['cluster'] = get_all_clusters(url, port)
     return render_template("manage.html", user=current_user, cluster=session['cluster'])
 
