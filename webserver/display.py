@@ -4,11 +4,14 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 import requests
 from flask_login import login_required, current_user
 from pydantic import BaseModel
+from config.Config import ConnectionConfig
+from config.ConfigManagement import remove_config_by_id, retrieve_config_by_type, save_config
 
 from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
 from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
 from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdOperation,  RemoveDiskTagByIdRequest
 from operation.cluster.CreateCluster import CreateClusterInfo, CreateClusterOperation, CreateClusterRequest
+from config import *
 from . import op
 from .op import generate_list_on_cluster_to_str, generate_list_on_cluster, get_all_clusters
 import os
@@ -30,14 +33,29 @@ def exception_to_string(excp):
 @display.route("/", methods=["GET", "POST"])  # Say what method is allowed here
 @login_required  # only users logged in are allowed
 def home():
+    configs = retrieve_config_by_type(uid=current_user.id,type=ConnectionConfig)
     if request.method == "POST":
+       
+
+        
+
         port = request.form.get("port")
         url = request.form.get("url")
         session["port"] = port  # session data--goes to any page
-        session["url"] = url
-        return redirect(url_for("display.manage"))
+        session["url"] = url 
+        configs = retrieve_config_by_type(uid=current_user.id,type=ConnectionConfig)
+        for config in configs:
+            if config.host == url and config.port == int(port):
+                remove_config_by_id(uid=current_user.id, config_id=config.config_id)
 
-    return render_template("home.html", user=current_user)
+        save_config(current_user.id, ConnectionConfig(
+            host = url,
+            port = int(port)
+        ))   
+
+        return redirect(url_for("display.manage"))
+    configs = map(lambda x: x.dict(), configs)
+    return render_template("home.html", user=current_user, config = configs)
 
 
 # Say what method is allowed here
@@ -136,8 +154,8 @@ def manage():
             ),
             hosts=[]
         ))
-
     session['cluster'] = get_all_clusters(url, port)
+    
     return render_template("manage.html", user=current_user, cluster=session['cluster'])
 
 
