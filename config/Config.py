@@ -17,7 +17,7 @@ class ConnectionConfig(Config):
 ### Host
 
 
-class DiskAction:
+class DiskAction(BaseModel):
     tags: list[str]
 
 
