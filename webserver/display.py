@@ -207,7 +207,22 @@ def host_info():
             )).data
         )
     except Exception as e:
-        e
+        return pack_exception(e)
+
+
+@display.route("/host/free", methods=["GET"])
+@login_required
+def host_free():
+    try:
+        server_host = session["url"] + ":" + str(session["port"])
+        curr = []
+        for host in GetAllHostOperation(server_host).invoke(GetAllHostRequest()).data:
+            if host.clusterId is None:
+                curr.append(host)
+
+        pack_success(curr)
+
+    except Exception as e:
         return pack_exception(e)
 
 
