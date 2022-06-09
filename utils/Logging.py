@@ -22,4 +22,19 @@ class ColorCode(Enum):
             return "\033[36m"
         elif self == ColorCode.RESET:
             return "\033[0m"
-        raise "Never Happen"
+        raise "死"
+
+    def to_html(self) -> str:
+        if self == ColorCode.GREEN:
+            return "<p style='color:green'>"
+        elif self == ColorCode.RED:
+            return "<p style='color:red'>"
+        elif self == ColorCode.YELLOW:
+            return "<p style='color:yellow'>"
+        elif self == ColorCode.CYAN:
+            return "<p style='color:cyan'>"
+        elif self == ColorCode.BLUE:
+            return "<p style='color:blue'>"
+        elif self == ColorCode.RESET:
+            return "</p>"
+        raise "死"
