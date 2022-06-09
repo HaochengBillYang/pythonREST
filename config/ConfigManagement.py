@@ -1,6 +1,7 @@
 import importlib
 import json
 import os
+import uuid
 from pathlib import Path
 
 from config.Config import ConnectionConfig, Config
@@ -56,6 +57,7 @@ def save_config(uid: int, config: Config):
     file = Path(os.path.join(
         DATA_FOLDER, (str(uid) + ".json")
     ))
+    config.config_id = str(uuid.uuid4())
 
     curr = []
     if file.is_file():

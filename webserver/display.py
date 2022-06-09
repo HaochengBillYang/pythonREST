@@ -9,7 +9,7 @@ from config.ConfigManagement import remove_config_by_id, retrieve_config_by_type
 
 from operation.disk.GiveDiskTagById import GiveDiskTagByIdOperation, GiveDiskTagByIdRequest
 from operation.host.GetAllHost import GetAllHostOperation, GetAllHostRequest
-from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdOperation,  RemoveDiskTagByIdRequest
+from operation.disk.RemoveDiskTagById import RemoveDiskTagByIdOperation, RemoveDiskTagByIdRequest
 from operation.cluster.CreateCluster import CreateClusterInfo, CreateClusterOperation, CreateClusterRequest
 from config import *
 from . import op
@@ -33,29 +33,26 @@ def exception_to_string(excp):
 @display.route("/", methods=["GET", "POST"])  # Say what method is allowed here
 @login_required  # only users logged in are allowed
 def home():
-    configs = retrieve_config_by_type(uid=current_user.id,type=ConnectionConfig)
+    configs = retrieve_config_by_type(uid=current_user.id, type=ConnectionConfig)
     if request.method == "POST":
-       
-
-        
 
         port = request.form.get("port")
         url = request.form.get("url")
         session["port"] = port  # session data--goes to any page
-        session["url"] = url 
-        configs = retrieve_config_by_type(uid=current_user.id,type=ConnectionConfig)
+        session["url"] = url
+        configs = retrieve_config_by_type(uid=current_user.id, type=ConnectionConfig)
         for config in configs:
             if config.host == url and config.port == int(port):
                 remove_config_by_id(uid=current_user.id, config_id=config.config_id)
 
         save_config(current_user.id, ConnectionConfig(
-            host = url,
-            port = int(port)
-        ))   
+            host=url,
+            port=int(port)
+        ))
 
         return redirect(url_for("display.manage"))
     configs = map(lambda x: x.dict(), configs)
-    return render_template("home.html", user=current_user, config = configs)
+    return render_template("home.html", user=current_user, config=configs)
 
 
 # Say what method is allowed here
@@ -144,18 +141,18 @@ def manage():
         copy = request.form.get("copy")
         ip = request.form.get("ip")
         CreateClusterOperation(
-            host=url+":"+port
+            host=url + ":" + port
         ).invoke(CreateClusterRequest(
-            cluster = CreateClusterInfo(
-                clusterName = name,
-                minClusterSize = minsize,
-                replicationFactor = copy,
-                virtualIp = ip
+            cluster=CreateClusterInfo(
+                clusterName=name,
+                minClusterSize=minsize,
+                replicationFactor=copy,
+                virtualIp=ip
             ),
             hosts=[]
         ))
     session['cluster'] = get_all_clusters(url, port)
-    
+
     return render_template("manage.html", user=current_user, cluster=session['cluster'])
 
 
@@ -273,10 +270,10 @@ def remove_tag_request():
     tags = request.json['tags']
     for item in request.json['disks']:
         existing_tags = item['diskTags']
-        for tag in tags: 
+        for tag in tags:
             if tag not in existing_tags:
                 fail = True
-                failure_message.append(str(item['diskId'])+ ' cannot be deleted tag: ' + str(tags) + '</br>')
+                failure_message.append(str(item['diskId']) + ' cannot be deleted tag: ' + str(tags) + '</br>')
 
     if fail:
         return pack_failure(''.join(failure_message))
@@ -286,7 +283,7 @@ def remove_tag_request():
                 for tag in tags:
                     RemoveDiskTagByIdOperation(
                         host=(session['url'] + ':' + str(session['port']))
-                        ).invoke(RemoveDiskTagByIdRequest(
+                    ).invoke(RemoveDiskTagByIdRequest(
                         diskIds=[item['diskId']],
                         hostId=item['hostId'],
                         diskTag=tag
