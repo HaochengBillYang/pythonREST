@@ -15,8 +15,17 @@ class ConnectionConfig(Config):
     port: int
 
 ### Host
+
+
+class DiskAction:
+    tags: list[str]
+
+
 class HostConfig(Config):
     host: str
+    actionsOnDisks: list[DiskAction]
+    defaultAction: DiskAction
+
 
 
 
