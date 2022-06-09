@@ -88,14 +88,12 @@
 
         <div id="recent" class="mdui-shadow-21">
             <ul class="mdui-list">
-                <li class="mdui-list-item mdui-ripple auto-fill" host="https://127.0.0.1" port="8773">
+                {%for element in config:%}
+                <li class="mdui-list-item mdui-ripple auto-fill" host="{{element['host']}}" port="{{element['port']}}">
                     <i class="mdui-list-item-icon mdui-icon material-icons">send</i>
-                    <div class="mdui-list-item-content">https://127.0.0.1:8773</div>
+                    <div class="mdui-list-item-content">{{element['host'] + ':'+ element['port']|string}}</div>
                 </li>
-                <li class="mdui-list-item mdui-ripple auto-fill" host="https://137.0.0.1" port="0773">
-                    <i class="mdui-list-item-icon mdui-icon material-icons">send</i>
-                    <div class="mdui-list-item-content">https://137.0.0.1:0773</div>
-                </li>
+                {%endfor%}
             </ul>
         </div>
 
