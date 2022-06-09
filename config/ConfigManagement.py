@@ -28,7 +28,6 @@ def retrieve_config_by_type(uid: int, type) -> list[Config]:
     kclass = getattr(kmodule, type)
 
     for fat in json.loads(file.read_text()):
-        print(fat["type"])
         if fat["type"] == type:
             curr.append(
                 kclass(**fat["data"])
