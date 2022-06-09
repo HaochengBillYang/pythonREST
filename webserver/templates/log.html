@@ -1,0 +1,8 @@
+{%extends "base.html"%}
+{%block content%}
+    <div class="mdui-shadow-21" style="padding: 1%;width: 100%; overflow:scroll;">
+        {%for item in log%}
+        {{item|safe}}
+        {%endfor%}
+    </div>
+{%endblock%}

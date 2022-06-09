@@ -10,6 +10,7 @@ class SyncDebugLogger(Pipeline):
     def into_file(self, msg: str) -> None:
         file = open("/home/hcd/Documents/webserverlog.txt", "a")
         file.writelines(msg+"</br>")
+        file.close()
         
 
     def __init__(self, logger_name: str):
@@ -28,9 +29,9 @@ class SyncDebugLogger(Pipeline):
             self.into_file(file_build)
 
     def invoke_before_request(self, request: Request):
-        console_build = "<============================================== timestamp=" + str(int(time.time() * 1000)) + " =>"
+        console_build = "<p style='color:white'>" + "<============================================== timestamp=" + str(int(time.time() * 1000)) + " =>"+ "</p>"
         print(console_build)
-        file_build = "<============================================== timestamp=" + str(int(time.time() * 1000)) + " =>"
+        file_build = "<p style='color:white'>" + "<============================================== timestamp=" + str(int(time.time() * 1000)) + " =>" + "</p>"
         self.into_file(file_build)
         method = "Form Post"
         if "RestRequest" in request.__class__.__name__:
@@ -52,7 +53,7 @@ class SyncDebugLogger(Pipeline):
 
         self.logger(color, " << " + request.url + " ;code = " + str(response.return_code))
         self.logger(color, response.return_data, False)
-        console_build = "<============================================== timestamp=" + str(int(time.time() * 1000)) + " => \n\n\n"
+        console_build = "<p style='color:white'>" + "<============================================== timestamp=" + str(int(time.time() * 1000)) + " => " + "</p>"
         print(console_build)
-        file_build = "<============================================== timestamp=" + str(int(time.time() * 1000)) + " => </br>"
+        file_build = "<p style='color:white'>" + "<============================================== timestamp=" + str(int(time.time() * 1000)) + " => " + "</p>"
         self.into_file(file_build)

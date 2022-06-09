@@ -32,9 +32,9 @@ class ColorCode(Enum):
         elif self == ColorCode.YELLOW:
             return "<p style='color:yellow'>"
         elif self == ColorCode.CYAN:
-            return "<p style='color:cyan'>"
+            return "<p style='color:teal'>"
         elif self == ColorCode.BLUE:
-            return "<p style='color:blue'>"
+            return "<p style='color:skyblue'>"
         elif self == ColorCode.RESET:
             return "</p>"
         raise "死"

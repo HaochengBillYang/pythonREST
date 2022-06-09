@@ -1,4 +1,5 @@
 import os
+import re
 import pydantic
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session, jsonify, send_from_directory
 import requests
@@ -307,3 +308,16 @@ def remove_tag_request():
                 return pack_success("0 errors, 0 warnings")
     except Exception as e:
         return pack_exception(e)
+
+@display.route("log", methods=["GET"])
+@login_required
+def log():
+    file = open("/home/hcd/Documents/webserverlog.txt", "r")
+    content = file.read()
+    content.replace("</p>", "")
+    content = content.split('</br>')
+    return render_template("log.html", user=current_user, log = content)
+
+@display.route("/favicon.ico", methods=["GET"])
+def icon():
+    return send_from_directory(STATIC_FOLDER, STATIC_FOLDER, 'favicon.ico')
