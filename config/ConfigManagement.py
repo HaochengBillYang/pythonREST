@@ -51,7 +51,6 @@ def remove_config_by_id(uid: int, config_id: str):
     file.write_text(json.dumps(curr))
 
 
-
 def save_config(uid: int, config: Config):
     file = Path(os.path.join(
         DATA_FOLDER, (str(uid) + ".json")
