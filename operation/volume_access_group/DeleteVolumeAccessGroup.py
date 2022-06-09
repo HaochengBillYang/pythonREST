@@ -5,7 +5,6 @@ from pydantic import BaseModel
 
 from request.Request import RestRequest, Method
 from request.pipelines.KeyExchange import KeyExchangePipeline
-from utils.Structs import Initiator, Volume
 from utils.Utils import CustomBase
 
 
