@@ -1,1 +1,19 @@
-[{"type": "ConnectionConfig", "data": {"config_id": "79310556-cffc-423e-835e-8d75b9b4a534", "host": "https://172.16.4.248", "port": 8443}}, {"type": "ConnectionConfig", "data": {"config_id": "742781ae-555a-4613-9402-774218f26969", "host": "https://172.16.4.241", "port": 8443}}]
+[
+  {
+    "type": "ConnectionConfig",
+    "data": {
+      "config_id": "1d6eceb1-f469-4505-88c0-a67922582c1d",
+      "host": "https://172.16.4.249",
+      "port": 8443
+    }
+  },
+  {
+    "type": "ConnectionConfig",
+    "data": {
+      "config_id": "8333e6eb-7bac-4189-8f27-d7a7bf5ceb2a",
+      "host": "https://172.16.4.248",
+      "port": 8443
+    }
+  }
+]
+

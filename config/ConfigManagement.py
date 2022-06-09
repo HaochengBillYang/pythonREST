@@ -1,6 +1,7 @@
 import importlib
 import json
 import os
+import uuid
 from pathlib import Path
 
 from config.Config import ConnectionConfig, Config
@@ -27,7 +28,6 @@ def retrieve_config_by_type(uid: int, type) -> list[Config]:
     kclass = getattr(kmodule, type)
 
     for fat in json.loads(file.read_text()):
-        print(fat["type"])
         if fat["type"] == type:
             curr.append(
                 kclass(**fat["data"])
@@ -51,11 +51,11 @@ def remove_config_by_id(uid: int, config_id: str):
     file.write_text(json.dumps(curr))
 
 
-
 def save_config(uid: int, config: Config):
     file = Path(os.path.join(
         DATA_FOLDER, (str(uid) + ".json")
     ))
+    config.config_id = str(uuid.uuid4())
 
     curr = []
     if file.is_file():
